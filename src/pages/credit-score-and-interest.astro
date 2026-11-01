@@ -2,6 +2,7 @@
 import { Fieldset, Input, Radio } from 'accessible-astro-components';
 import Base from '../layouts/Base.astro';
 import { AUTO_RATES, AUTO_RATE_SOURCE } from '../data/auto-rates';
+import '../styles/tools.css';
 import { text } from '../text/en';
 
 const t = text.creditTool;
@@ -94,6 +95,7 @@ const loanLengths = [36, 48, 60, 72];
 <script>
   import { AUTO_RATES } from '../data/auto-rates';
   import type { VehicleType } from '../data/auto-rates';
+  import { setFieldError } from '../lib/fields';
   import { monthlyPayment, parseUserNumber, totalInterest } from '../lib/loan';
   import { text } from '../text/en';
 
@@ -123,11 +125,6 @@ const loanLengths = [36, 48, 60, 72];
 
   function clearRow(row: Element) {
     for (const cell of ['rate', 'payment', 'interest']) setCell(row, cell, t.empty);
-  }
-
-  function setFieldError(input: HTMLInputElement, message: string) {
-    input.setAttribute('aria-invalid', String(message !== ''));
-    document.querySelector(`#${input.id}-validation .message`)!.textContent = message;
   }
 
   function update() {
@@ -182,101 +179,6 @@ const loanLengths = [36, 48, 60, 72];
 </script>
 
 <style>
-  .note {
-    color: var(--muted);
-    font-size: 0.95rem;
-  }
-
-  form {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: 8px;
-    padding: 1rem;
-  }
-
-  .field {
-    margin: 0 0 1rem;
-  }
-
-  .field > label,
-  .field :global(.input-group label),
-  .field :global(legend) {
-    display: block;
-    font-weight: 600;
-    margin-bottom: 0.25rem;
-    padding: 0;
-  }
-
-  .field :global(fieldset) {
-    margin: 0;
-    min-width: 0;
-  }
-
-  .field :global(.fieldset-group) {
-    flex-direction: row;
-    gap: 1.5rem;
-  }
-
-  .field :global(.input-group) {
-    gap: 0;
-  }
-
-  .field :global(.input-group small) {
-    margin-top: 0.25rem;
-    font-size: 0.95rem;
-  }
-
-  .field :global(.input-group input),
-  select {
-    width: 100%;
-    max-width: 20rem;
-    padding: 0.5rem;
-    font: inherit;
-    color: var(--text);
-    background: var(--background);
-    border: 1px solid var(--muted);
-    border-radius: 6px;
-  }
-
-  .field .note {
-    margin: 0.25rem 0 0;
-  }
-
-  .table-wrapper {
-    overflow-x: auto;
-  }
-
-  table {
-    width: 100%;
-    border-collapse: collapse;
-    background: var(--surface);
-  }
-
-  caption {
-    text-align: left;
-    color: var(--muted);
-    font-size: 0.95rem;
-    padding-bottom: 0.5rem;
-  }
-
-  th,
-  td {
-    padding: 0.5rem 0.3rem;
-    border-bottom: 1px solid var(--border);
-    font-size: 0.95rem;
-    text-align: right;
-    white-space: nowrap;
-  }
-
-  thead th {
-    vertical-align: bottom;
-    white-space: normal;
-  }
-
-  th:first-child {
-    text-align: left;
-  }
-
   #own-rate-row th,
   #own-rate-row td {
     background: var(--highlight);

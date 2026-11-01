@@ -1,0 +1,245 @@
+---
+import { Input } from 'accessible-astro-components';
+import Base from '../layouts/Base.astro';
+import { CREDIT_CARD_RATE, SAVINGS_RATE } from '../data/reference-rates';
+import { PLANS, SURPRISE_MONTH } from '../lib/debt-vs-savings';
+import '../styles/tools.css';
+import { text } from '../text/en';
+
+const t = text.debtTool;
+const sources = [CREDIT_CARD_RATE, SAVINGS_RATE];
+---
+
+<Base title={t.title} description={t.description} crumbs={[{ label: t.title }]}>
+  <h1>{t.title}</h1>
+  <p>{t.intro}</p>
+  <p>{t.noRightAnswer}</p>
+
+  <h2>{t.formHeading}</h2>
+  <p class="note">{t.privacy}</p>
+  <p class="note">{t.examples}</p>
+
+  <form id="plan-form" novalidate>
+    <div class="field">
+      <Input id="debt" name="debt" label={t.debtLabel} inputmode="decimal" autocomplete="off" value="5000" />
+    </div>
+    <div class="field">
+      <Input id="debt-rate" name="debtRate" label={t.debtRateLabel} inputmode="decimal" autocomplete="off" value={String(CREDIT_CARD_RATE.percent)} />
+    </div>
+    <div class="field">
+      <Input id="minimum" name="minimum" label={t.minimumLabel} inputmode="decimal" autocomplete="off" value="150" />
+    </div>
+    <div class="field">
+      <Input id="extra" name="extra" label={t.extraLabel} inputmode="decimal" autocomplete="off" value="100" />
+      <p id="extra-hint" class="note" data-hint-for="extra">{t.extraHint}</p>
+    </div>
+    <div class="field">
+      <Input id="savings" name="savings" label={t.savingsLabel} inputmode="decimal" autocomplete="off" value="0" />
+    </div>
+    <div class="field">
+      <Input id="savings-rate" name="savingsRate" label={t.savingsRateLabel} inputmode="decimal" autocomplete="off" value={String(SAVINGS_RATE.percent)} />
+    </div>
+    <div class="field">
+      <Input id="surprise" name="surprise" label={t.surpriseLabel} inputmode="decimal" autocomplete="off" value="500" />
+      <p id="surprise-hint" class="note" data-hint-for="surprise">{t.surpriseHint(SURPRISE_MONTH)}</p>
+    </div>
+  </form>
+
+  <h2>{t.resultsHeading}</h2>
+  <noscript><p>{t.needsJavaScript}</p></noscript>
+  <p id="summary" aria-live="polite"></p>
+
+  <div class="table-wrapper">
+    <table>
+      <caption id="results-caption">{t.tableCaption}</caption>
+      <thead>
+        <tr>
+          <th scope="col">{t.planColumn}</th>
+          <th scope="col">{t.debtFreeColumn}</th>
+          <th scope="col">{t.interestColumn}</th>
+          <th scope="col">{t.savingsColumn}</th>
+        </tr>
+      </thead>
+      <tbody>
+        {
+          PLANS.map((plan) => (
+            <tr data-plan={plan.id}>
+              <th scope="row">{t.planNames[plan.id]}</th>
+              <td data-cell="debtFree">{t.empty}</td>
+              <td data-cell="interest">{t.empty}</td>
+              <td data-cell="savings">{t.empty}</td>
+            </tr>
+          ))
+        }
+      </tbody>
+    </table>
+  </div>
+
+  <h2>{t.aboutHeading}</h2>
+  <p>{t.aboutTable}</p>
+  <p>{t.aboutLimits}</p>
+  <ul>
+    {t.assumptions.map((assumption) => <li>{assumption}</li>)}
+  </ul>
+  <p>{t.aboutRates}</p>
+  {
+    sources.map((source) => (
+      <p class="note">
+        {t.sourceLabel} <a href={source.url}>{source.name}</a>
+        {`, ${source.period}. ${t.lastChecked(source.lastChecked)}`}
+      </p>
+    ))
+  }
+</Base>
+
+<script>
+  import { comparePlans, MAX_MONTHS, paymentCoversInterest, SURPRISE_MONTH } from '../lib/debt-vs-savings';
+  import type { PlanResult } from '../lib/debt-vs-savings';
+  import { setFieldError } from '../lib/fields';
+  import { parseUserNumber } from '../lib/loan';
+  import { text } from '../text/en';
+
+  const t = text.debtTool;
+  const dollars = new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' });
+  const wholeDollars = new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD', maximumFractionDigits: 0 });
+
+  const form = document.querySelector<HTMLFormElement>('#plan-form')!;
+  const summary = document.querySelector<HTMLElement>('#summary')!;
+  const caption = document.querySelector<HTMLElement>('#results-caption')!;
+
+  interface Rule {
+    id: string;
+    message: string;
+    isValid: (value: number) => boolean;
+    optional?: boolean;
+  }
+
+  const isPositive = (value: number) => value > 0;
+  const isZeroOrMore = (value: number) => value >= 0;
+  const isRate = (value: number) => value >= 0 && value <= 100;
+
+  const rules: Rule[] = [
+    { id: 'debt', message: t.invalidDebt, isValid: isPositive },
+    { id: 'debt-rate', message: t.invalidRate, isValid: isRate },
+    { id: 'minimum', message: t.invalidMinimum, isValid: isPositive },
+    { id: 'extra', message: t.invalidAmount, isValid: isZeroOrMore },
+    { id: 'savings', message: t.invalidAmount, isValid: isZeroOrMore },
+    { id: 'savings-rate', message: t.invalidRate, isValid: isRate },
+    { id: 'surprise', message: t.invalidAmount, isValid: isZeroOrMore, optional: true },
+  ];
+
+  function field(id: string) {
+    return document.querySelector<HTMLInputElement>(`#${id}`)!;
+  }
+
+  // Returns the field's number, or null after marking it invalid.
+  function readField(rule: Rule): number | null {
+    const input = field(rule.id);
+    const isBlank = input.value.trim() === '';
+    const value = isBlank && rule.optional ? 0 : parseUserNumber(input.value);
+    const isValid = Number.isFinite(value) && rule.isValid(value);
+    setFieldError(input, isValid ? '' : rule.message);
+    return isValid ? value : null;
+  }
+
+  function setCell(row: Element, cell: string, value: string) {
+    row.querySelector(`[data-cell="${cell}"]`)!.textContent = value;
+  }
+
+  function clearTable() {
+    document.querySelectorAll('[data-plan]').forEach((row) => {
+      for (const cell of ['debtFree', 'interest', 'savings']) setCell(row, cell, t.empty);
+    });
+  }
+
+  function comparisonSentence(paysDebt: PlanResult, savesFirst: PlanResult, months: number): string {
+    if (paysDebt.debtFreeMonth === null || savesFirst.debtFreeMonth === null) {
+      return t.summaryNotAllPaid(wholeDollars.format(savesFirst.debtLeft), months);
+    }
+    const saved = savesFirst.interestPaid - paysDebt.interestPaid;
+    if (saved < 0.5) return t.summaryClose;
+    return t.summary(wholeDollars.format(saved), savesFirst.debtFreeMonth - paysDebt.debtFreeMonth);
+  }
+
+  function update() {
+    const [debt, debtRatePercent, minimumPayment, extraPerMonth, savings, savingsRatePercent, surpriseExpense] =
+      rules.map(readField);
+
+    if (
+      debt === null ||
+      debtRatePercent === null ||
+      minimumPayment === null ||
+      extraPerMonth === null ||
+      savings === null ||
+      savingsRatePercent === null ||
+      surpriseExpense === null
+    ) {
+      clearTable();
+      caption.textContent = t.tableCaption;
+      summary.textContent = t.fixFields;
+      return;
+    }
+
+    if (!paymentCoversInterest(debt, debtRatePercent, minimumPayment + extraPerMonth)) {
+      clearTable();
+      caption.textContent = t.tableCaption;
+      summary.textContent = t.paymentTooLow(dollars.format((debt * debtRatePercent) / 100 / 12));
+      return;
+    }
+
+    const comparison = comparePlans({
+      debt,
+      debtRatePercent,
+      minimumPayment,
+      savings,
+      savingsRatePercent,
+      extraPerMonth,
+      surpriseExpense,
+    });
+
+    caption.textContent = t.tableCaptionMonths(comparison.months);
+
+    for (const { plan, result } of comparison.plans) {
+      const row = document.querySelector(`[data-plan="${plan.id}"]`)!;
+      const paidOff = result.debtFreeMonth !== null;
+      setCell(row, 'debtFree', paidOff ? t.monthCount(result.debtFreeMonth!) : t.notPaidOff(MAX_MONTHS));
+      setCell(row, 'interest', dollars.format(result.interestPaid));
+      setCell(row, 'savings', dollars.format(result.savings));
+    }
+
+    const [paysDebt, , savesFirst] = comparison.plans.map(({ result }) => result);
+
+    if (extraPerMonth === 0) {
+      summary.textContent = t.summaryNoExtra;
+      return;
+    }
+
+    summary.textContent = comparisonSentence(paysDebt, savesFirst, comparison.months);
+
+    if (surpriseExpense > 0) {
+      summary.textContent += ` ${t.summarySurprise(
+        wholeDollars.format(surpriseExpense),
+        SURPRISE_MONTH,
+        wholeDollars.format(paysDebt.surpriseAddedToDebt),
+        wholeDollars.format(savesFirst.surpriseAddedToDebt),
+      )}`;
+    }
+  }
+
+  // The library's Input sets aria-describedby itself, so hints are added here.
+  document.querySelectorAll<HTMLElement>('[data-hint-for]').forEach((hint) => {
+    const id = hint.dataset.hintFor!;
+    field(id).setAttribute('aria-describedby', `${id}-validation ${hint.id}`);
+  });
+
+  form.addEventListener('input', update);
+  form.addEventListener('submit', (event) => event.preventDefault());
+  update();
+</script>
+
+<style>
+  tbody th,
+  td[data-cell='debtFree'] {
+    white-space: normal;
+  }
+</style>
