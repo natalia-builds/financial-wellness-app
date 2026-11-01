@@ -70,6 +70,7 @@ Progress is framed as personal milestones rather than points or streaks, for exa
 - **Languages:** The project will support English only for the time being. Review before Phase 2. ([Issue #6](https://github.com/natalia-builds/financial-wellness-app/issues/6))
 - **Measuring progress:** Phase 1 will not track individuals. It will rely on anonymous totals and optional questions, including asking people directly whether they've moved on to a new goal.
 - **Tier 3 boundary:** Tier 3 is education only. Calculators work with the person's own numbers, the tool states clearly that it is educational, and it never recommends specific investments, products, or companies. Have a qualified person review the wording before launch.
+- **Components:** New interactive components come from [Accessible Astro Components](https://github.com/incluud/accessible-astro-components), which is built for Astro, adds no dependencies, and focuses on accessibility. Existing plain HTML stays where it works. A library doesn't guarantee accessibility, so each component is still tested against WCAG 2.2 Level AA.
 
 ## Open Questions
 
