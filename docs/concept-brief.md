@@ -17,6 +17,7 @@ People facing financial insecurity often don't know which public resources they 
 - **Encourage the climb.** As people stabilize, the tool gently invites them toward the next tier.
 - **Dignity first.** Language and design never shame or patronize.
 - **Privacy by default.** Collect only what's needed, and let users stay anonymous wherever possible.
+- **Accessible to everyone.** Everything we build meets WCAG 2.2 Level AA.
 
 ## Target Users
 
