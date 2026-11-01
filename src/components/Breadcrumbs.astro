@@ -1,0 +1,45 @@
+---
+import { text } from '../text/en';
+
+export interface Crumb {
+  label: string;
+  href?: string; // Leave out for the current page
+}
+
+interface Props {
+  crumbs: Crumb[];
+}
+
+const { crumbs } = Astro.props;
+const trail: Crumb[] = [{ label: text.site.home, href: '/' }, ...crumbs];
+---
+
+<nav aria-label={text.site.breadcrumbLabel}>
+  <ol>
+    {
+      trail.map((crumb) => (
+        <li>{crumb.href ? <a href={crumb.href}>{crumb.label}</a> : <span aria-current="page">{crumb.label}</span>}</li>
+      ))
+    }
+  </ol>
+</nav>
+
+<style>
+  ol {
+    list-style: none;
+    margin: 0.25rem 0 0;
+    padding: 0;
+    color: var(--muted);
+    font-size: 0.95rem;
+  }
+
+  li {
+    display: inline;
+  }
+
+  li + li::before {
+    content: '›';
+    content: '›' / '';
+    margin: 0 0.5rem;
+  }
+</style>

@@ -4,6 +4,8 @@
 export const text = {
   site: {
     name: 'Financial Wellness',
+    home: 'Home',
+    breadcrumbLabel: 'Breadcrumb',
     footer: 'Free and open source. This site is for education only and is not financial advice.',
     sourceCode: 'See the source code',
   },
@@ -53,6 +55,5 @@ export const text = {
       'Lenders also look at your income, your down payment, the car, and the loan length. There are several kinds of credit score, so yours may vary depending on which one you see.',
     sourceLabel: 'Source:',
     lastChecked: (date: string) => `Last checked ${date}.`,
-    backHome: 'Back to all tools',
   },
 };

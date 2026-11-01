@@ -1,12 +1,15 @@
 ---
+import Breadcrumbs from '../components/Breadcrumbs.astro';
+import type { Crumb } from '../components/Breadcrumbs.astro';
 import { text } from '../text/en';
 
 interface Props {
   title: string;
   description: string;
+  crumbs?: Crumb[];
 }
 
-const { title, description } = Astro.props;
+const { title, description, crumbs } = Astro.props;
 ---
 
 <!doctype html>
@@ -20,6 +23,7 @@ const { title, description } = Astro.props;
   <body>
     <header>
       <a href="/" class="site-name">{text.site.name}</a>
+      {crumbs && <Breadcrumbs crumbs={crumbs} />}
     </header>
     <main>
       <slot />

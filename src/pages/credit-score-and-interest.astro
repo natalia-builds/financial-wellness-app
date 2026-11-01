@@ -7,7 +7,7 @@ const t = text.creditTool;
 const loanLengths = [36, 48, 60, 72];
 ---
 
-<Base title={t.title} description={t.description}>
+<Base title={t.title} description={t.description} crumbs={[{ label: t.title }]}>
   <h1>{t.title}</h1>
   <p>{t.intro}</p>
   <p>{t.dignity}</p>
@@ -83,7 +83,6 @@ const loanLengths = [36, 48, 60, 72];
   <p class="note">
     {t.sourceLabel} <a href={AUTO_RATE_SOURCE.url}>{AUTO_RATE_SOURCE.name}</a>{`, ${AUTO_RATE_SOURCE.period}. ${t.lastChecked(AUTO_RATE_SOURCE.lastChecked)}`}
   </p>
-  <p><a href="/">{t.backHome}</a></p>
 </Base>
 
 <script>
