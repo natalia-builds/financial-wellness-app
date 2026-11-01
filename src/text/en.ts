@@ -43,6 +43,7 @@ export const text = {
     needsJavaScript: 'This calculator needs JavaScript. Please turn it on in your browser to see the results.',
     summary: (difference: string, highScores: string, lowScores: string) =>
       `With these average rates, this loan costs about ${difference} more in interest for someone with a ${lowScores} score than for someone with a ${highScores} score.`,
+    ownRateSummary: (rate: string, interest: string) => `At your rate of ${rate}, total interest is ${interest}.`,
     invalidAmount: 'Please enter a loan amount greater than zero.',
     invalidRate: 'Please enter an interest rate between 0 and 100, or leave it blank.',
     aboutHeading: 'About these numbers',

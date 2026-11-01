@@ -103,6 +103,8 @@ const loanLengths = [36, 48, 60, 72];
   const form = document.querySelector<HTMLFormElement>('#loan-form')!;
   const summary = document.querySelector<HTMLElement>('#summary')!;
   const ownRateRow = document.querySelector<HTMLTableRowElement>('#own-rate-row')!;
+  const amountInput = document.querySelector<HTMLInputElement>('#amount')!;
+  const ownRateInputField = document.querySelector<HTMLInputElement>('#own-rate')!;
 
   function setCell(row: Element, cell: string, value: string) {
     row.querySelector(`[data-cell="${cell}"]`)!.textContent = value;
@@ -127,9 +129,14 @@ const loanLengths = [36, 48, 60, 72];
     const ownRate = Number(ownRateInput);
     const rows = document.querySelectorAll('[data-row]');
 
+    const amountIsValid = Number.isFinite(principal) && principal > 0;
+    const ownRateIsValid = ownRateInput === '' || (Number.isFinite(ownRate) && ownRate >= 0 && ownRate <= 100);
+
+    amountInput.setAttribute('aria-invalid', String(!amountIsValid));
+    ownRateInputField.setAttribute('aria-invalid', String(!ownRateIsValid));
     ownRateRow.hidden = true;
 
-    if (!Number.isFinite(principal) || principal <= 0) {
+    if (!amountIsValid) {
       rows.forEach(clearRow);
       summary.textContent = t.invalidAmount;
       return;
@@ -137,14 +144,9 @@ const loanLengths = [36, 48, 60, 72];
 
     AUTO_RATES.forEach((rate, index) => fillRow(rows[index], principal, rate[vehicle], months));
 
-    if (ownRateInput !== '' && (!Number.isFinite(ownRate) || ownRate < 0 || ownRate > 100)) {
+    if (!ownRateIsValid) {
       summary.textContent = t.invalidRate;
       return;
-    }
-
-    if (ownRateInput !== '') {
-      fillRow(ownRateRow, principal, ownRate, months);
-      ownRateRow.hidden = false;
     }
 
     const highest = AUTO_RATES[0];
@@ -152,6 +154,13 @@ const loanLengths = [36, 48, 60, 72];
     const difference =
       totalInterest(principal, lowest[vehicle], months) - totalInterest(principal, highest[vehicle], months);
     summary.textContent = t.summary(wholeDollars.format(difference), highest.scoreRange, lowest.scoreRange);
+
+    if (ownRateInput !== '') {
+      fillRow(ownRateRow, principal, ownRate, months);
+      ownRateRow.hidden = false;
+      const ownInterest = dollars.format(totalInterest(principal, ownRate, months));
+      summary.textContent += ` ${t.ownRateSummary(`${ownRate.toFixed(2)}%`, ownInterest)}`;
+    }
   }
 
   form.addEventListener('input', update);
@@ -245,6 +254,17 @@ const loanLengths = [36, 48, 60, 72];
 
   #own-rate-row th,
   #own-rate-row td {
+    background: var(--highlight);
+    border-top: 2px solid var(--accent);
+    border-bottom: 2px solid var(--accent);
     font-weight: 700;
+  }
+
+  #own-rate-row th {
+    border-left: 2px solid var(--accent);
+  }
+
+  #own-rate-row td:last-child {
+    border-right: 2px solid var(--accent);
   }
 </style>
