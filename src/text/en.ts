@@ -6,6 +6,7 @@ export const text = {
     name: 'Financial Wellness',
     home: 'Home',
     breadcrumbLabel: 'Breadcrumb',
+    skipLink: 'Skip to main content',
     footer: 'Free and open source. This site is for education only and is not financial advice.',
     sourceCode: 'See the source code',
   },

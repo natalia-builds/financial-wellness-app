@@ -12,6 +12,12 @@ function assertValidLoan(principal: number, annualRatePercent: number, months: n
   }
 }
 
+// Reads a number as people type it, such as "$25,000" or "7.5%".
+export function parseUserNumber(input: string): number {
+  const cleaned = input.replace(/[$,%\s]/g, '');
+  return cleaned === '' ? Number.NaN : Number(cleaned);
+}
+
 export function monthlyPayment(principal: number, annualRatePercent: number, months: number): number {
   assertValidLoan(principal, annualRatePercent, months);
 

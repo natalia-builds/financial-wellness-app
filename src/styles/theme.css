@@ -1,0 +1,15 @@
+/* Connects Accessible Astro Components to the site's colors and shapes.
+   `html:root` outranks the library's `:root`, so these values always win. */
+
+html:root {
+  --color-default-text: var(--text);
+  --color-default-bg: var(--surface);
+  --color-default-border: var(--muted);
+
+  --color-primary-text: var(--text);
+  --color-primary-bg: var(--highlight);
+  --color-primary-border: var(--accent);
+
+  --radius-s: 6px;
+  --radius-m: 8px;
+}

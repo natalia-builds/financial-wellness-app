@@ -1,4 +1,5 @@
 ---
+import { Fieldset, Input, Radio } from 'accessible-astro-components';
 import Base from '../layouts/Base.astro';
 import { AUTO_RATES, AUTO_RATE_SOURCE } from '../data/auto-rates';
 import { text } from '../text/en';
@@ -17,8 +18,7 @@ const loanLengths = [36, 48, 60, 72];
 
   <form id="loan-form" novalidate>
     <div class="field">
-      <label for="amount">{t.amountLabel}</label>
-      <input id="amount" name="amount" type="number" inputmode="decimal" min="1" step="100" value="25000" />
+      <Input id="amount" name="amount" label={t.amountLabel} inputmode="decimal" autocomplete="off" value="25000" />
     </div>
 
     <div class="field">
@@ -28,15 +28,21 @@ const loanLengths = [36, 48, 60, 72];
       </select>
     </div>
 
-    <fieldset class="field">
-      <legend>{t.vehicleLabel}</legend>
-      <label class="choice"><input type="radio" name="vehicle" value="new" checked /> {t.vehicleNew}</label>
-      <label class="choice"><input type="radio" name="vehicle" value="used" /> {t.vehicleUsed}</label>
-    </fieldset>
+    <div class="field">
+      <Fieldset name="vehicleGroup" legend={t.vehicleLabel} variant="minimal">
+        <Radio name="vehicle" label={t.vehicleNew} value="new" checked />
+        <Radio name="vehicle" label={t.vehicleUsed} value="used" />
+      </Fieldset>
+    </div>
 
     <div class="field">
-      <label for="own-rate">{t.ownRateLabel}</label>
-      <input id="own-rate" name="ownRate" type="number" inputmode="decimal" min="0" max="100" step="0.01" aria-describedby="own-rate-hint" />
+      <Input
+        id="own-rate"
+        name="ownRate"
+        label={t.ownRateLabel}
+        inputmode="decimal"
+        autocomplete="off"
+      />
       <p id="own-rate-hint" class="note">{t.ownRateHint}</p>
     </div>
   </form>
@@ -88,7 +94,7 @@ const loanLengths = [36, 48, 60, 72];
 <script>
   import { AUTO_RATES } from '../data/auto-rates';
   import type { VehicleType } from '../data/auto-rates';
-  import { monthlyPayment, totalInterest } from '../lib/loan';
+  import { monthlyPayment, parseUserNumber, totalInterest } from '../lib/loan';
   import { text } from '../text/en';
 
   const t = text.creditTool;
@@ -119,20 +125,25 @@ const loanLengths = [36, 48, 60, 72];
     for (const cell of ['rate', 'payment', 'interest']) setCell(row, cell, t.empty);
   }
 
+  function setFieldError(input: HTMLInputElement, message: string) {
+    input.setAttribute('aria-invalid', String(message !== ''));
+    document.querySelector(`#${input.id}-validation .message`)!.textContent = message;
+  }
+
   function update() {
     const data = new FormData(form);
-    const principal = Number(data.get('amount'));
+    const principal = parseUserNumber(String(data.get('amount')));
     const months = Number(data.get('months'));
     const vehicle = data.get('vehicle') as VehicleType;
     const ownRateInput = String(data.get('ownRate')).trim();
-    const ownRate = Number(ownRateInput);
+    const ownRate = parseUserNumber(ownRateInput);
     const rows = document.querySelectorAll('[data-row]');
 
     const amountIsValid = Number.isFinite(principal) && principal > 0;
     const ownRateIsValid = ownRateInput === '' || (Number.isFinite(ownRate) && ownRate >= 0 && ownRate <= 100);
 
-    amountInput.setAttribute('aria-invalid', String(!amountIsValid));
-    ownRateInputField.setAttribute('aria-invalid', String(!ownRateIsValid));
+    setFieldError(amountInput, amountIsValid ? '' : t.invalidAmount);
+    setFieldError(ownRateInputField, ownRateIsValid ? '' : t.invalidRate);
     ownRateRow.hidden = true;
 
     if (!amountIsValid) {
@@ -162,6 +173,9 @@ const loanLengths = [36, 48, 60, 72];
     }
   }
 
+  // The library's Input sets aria-describedby itself, so the hint is added here.
+  ownRateInputField.setAttribute('aria-describedby', 'own-rate-validation own-rate-hint');
+
   form.addEventListener('input', update);
   form.addEventListener('submit', (event) => event.preventDefault());
   update();
@@ -181,26 +195,38 @@ const loanLengths = [36, 48, 60, 72];
   }
 
   .field {
-    border: 0;
     margin: 0 0 1rem;
-    padding: 0;
   }
 
-  .field label,
-  legend {
+  .field > label,
+  .field :global(.input-group label),
+  .field :global(legend) {
     display: block;
     font-weight: 600;
     margin-bottom: 0.25rem;
     padding: 0;
   }
 
-  .field .choice {
-    display: inline-block;
-    font-weight: 400;
-    margin-right: 1.5rem;
+  .field :global(fieldset) {
+    margin: 0;
+    min-width: 0;
   }
 
-  input[type='number'],
+  .field :global(.fieldset-group) {
+    flex-direction: row;
+    gap: 1.5rem;
+  }
+
+  .field :global(.input-group) {
+    gap: 0;
+  }
+
+  .field :global(.input-group small) {
+    margin-top: 0.25rem;
+    font-size: 0.95rem;
+  }
+
+  .field :global(.input-group input),
   select {
     width: 100%;
     max-width: 20rem;

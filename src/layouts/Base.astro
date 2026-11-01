@@ -1,6 +1,8 @@
 ---
+import { SkipLink } from 'accessible-astro-components';
 import Breadcrumbs from '../components/Breadcrumbs.astro';
 import type { Crumb } from '../components/Breadcrumbs.astro';
+import '../styles/theme.css';
 import { text } from '../text/en';
 
 interface Props {
@@ -21,11 +23,12 @@ const { title, description, crumbs } = Astro.props;
     <title>{title}</title>
   </head>
   <body>
+    <SkipLink text={text.site.skipLink} />
     <header>
       <a href="/" class="site-name">{text.site.name}</a>
       {crumbs && <Breadcrumbs crumbs={crumbs} />}
     </header>
-    <main>
+    <main id="main-content">
       <slot />
     </main>
     <footer>
