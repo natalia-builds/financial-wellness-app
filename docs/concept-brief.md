@@ -55,13 +55,16 @@ Progress is framed as personal milestones rather than points or streaks, for exa
 - Share of users who move from one tier to the next
 - User-reported financial confidence over time
 
+## Decisions
+
+- **Platform:** The pilot will be a mobile-friendly website. ([Issue #5](https://github.com/natalia-builds/financial-wellness-app/issues/5))
+- **User data:** Phase 1 will store no user data on a server, with no accounts. Anything saved stays in the person's own browser. Review before Phase 2. ([Issue #7](https://github.com/natalia-builds/financial-wellness-app/issues/7))
+- **Languages:** The project will support English only for the time being. Review before Phase 2. ([Issue #6](https://github.com/natalia-builds/financial-wellness-app/issues/6))
+
 ## Open Questions
 
-- How will resource and eligibility data be sourced and kept current (partnership vs. self-maintained)?
-- Who maintains the project long term (volunteers, a fiscal sponsor, a nonprofit)?
-- Web app, mobile app, or both for the pilot?
-- Which languages beyond English should the pilot support?
-- What user data, if any, should be stored, and how?
+- How will resource and eligibility data be sourced and kept current (partnership vs. self-maintained)? ([Issue #3](https://github.com/natalia-builds/financial-wellness-app/issues/3))
+- Who maintains the project long term (volunteers, a fiscal sponsor, a nonprofit)? ([Issue #4](https://github.com/natalia-builds/financial-wellness-app/issues/4))
 
 ## Next Steps
 
