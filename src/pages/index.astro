@@ -1,0 +1,16 @@
+---
+import Base from '../layouts/Base.astro';
+import { text } from '../text/en';
+
+const t = text.home;
+---
+
+<Base title={t.title} description={t.description}>
+  <h1>{t.heading}</h1>
+  <p>{t.intro}</p>
+  <h2>{t.toolsHeading}</h2>
+  <p>
+    <a href="/credit-score-and-interest/">{t.creditToolLink}</a><br />
+    {t.creditToolSummary}
+  </p>
+</Base>
