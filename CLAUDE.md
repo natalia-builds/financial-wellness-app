@@ -22,6 +22,7 @@ Everything we build must meet **WCAG 2.2 Level AA**. This applies to every page,
 - **Privacy by default:** Phase 1 stores no user data on a server, with no accounts. Don't add tracking of individuals.
 - **Sourced numbers:** never invent rates or statistics. Keep them in `src/data/` with a named source, date, and period.
 - **Wording:** user-facing text lives in `src/text/en.ts`, separate from code.
+- **Components:** use `accessible-astro-components` for interactive components. Use plain HTML for simple elements such as tables and links. Before writing a custom component, check the library and say why it doesn't fit. Add the package when something first uses it, and test each component against the accessibility rules above.
 
 ## Workflow
 
