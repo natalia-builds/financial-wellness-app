@@ -1,0 +1,112 @@
+---
+import { text } from '../text/en';
+
+interface Props {
+  title: string;
+  description: string;
+}
+
+const { title, description } = Astro.props;
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content={description} />
+    <title>{title}</title>
+  </head>
+  <body>
+    <header>
+      <a href="/" class="site-name">{text.site.name}</a>
+    </header>
+    <main>
+      <slot />
+    </main>
+    <footer>
+      <p>{text.site.footer}</p>
+      <p><a href="https://github.com/natalia-builds/financial-wellness-app">{text.site.sourceCode}</a></p>
+    </footer>
+  </body>
+</html>
+
+<style is:global>
+  :root {
+    color-scheme: light dark;
+    --background: #fbfaf7;
+    --surface: #ffffff;
+    --text: #1f2a2e;
+    --muted: #55626a;
+    --border: #d5d9d8;
+    --accent: #0b6b5d;
+    --highlight: #e3f2ee;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --background: #14191b;
+      --surface: #1d2427;
+      --text: #eef1f0;
+      --muted: #aeb8bc;
+      --border: #3a4448;
+      --accent: #6fd6c4;
+      --highlight: #1f3a36;
+    }
+  }
+
+  *,
+  *::before,
+  *::after {
+    box-sizing: border-box;
+  }
+
+  body {
+    margin: 0;
+    background: var(--background);
+    color: var(--text);
+    font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+    font-size: 1.0625rem;
+    line-height: 1.6;
+  }
+
+  header,
+  main,
+  footer {
+    max-width: 44rem;
+    margin: 0 auto;
+    padding: 1rem;
+  }
+
+  a {
+    color: var(--accent);
+  }
+
+  .site-name {
+    font-weight: 700;
+    text-decoration: none;
+  }
+
+  h1 {
+    font-size: 2rem;
+    line-height: 1.2;
+    margin: 0.5rem 0 1rem;
+  }
+
+  h2 {
+    font-size: 1.35rem;
+    margin: 2rem 0 0.5rem;
+  }
+
+  footer {
+    margin-top: 2rem;
+    border-top: 1px solid var(--border);
+    color: var(--muted);
+    font-size: 0.9rem;
+  }
+
+  :focus-visible {
+    outline: 3px solid var(--accent);
+    outline-offset: 2px;
+  }
+</style>

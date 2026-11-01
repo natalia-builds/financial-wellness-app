@@ -1,0 +1,270 @@
+---
+import Base from '../layouts/Base.astro';
+import { AUTO_RATES, AUTO_RATE_SOURCE } from '../data/auto-rates';
+import { text } from '../text/en';
+
+const t = text.creditTool;
+const loanLengths = [36, 48, 60, 72];
+---
+
+<Base title={t.title} description={t.description}>
+  <h1>{t.title}</h1>
+  <p>{t.intro}</p>
+  <p>{t.dignity}</p>
+
+  <h2>{t.formHeading}</h2>
+  <p class="note">{t.privacy}</p>
+
+  <form id="loan-form" novalidate>
+    <div class="field">
+      <label for="amount">{t.amountLabel}</label>
+      <input id="amount" name="amount" type="number" inputmode="decimal" min="1" step="100" value="25000" />
+    </div>
+
+    <div class="field">
+      <label for="months">{t.monthsLabel}</label>
+      <select id="months" name="months">
+        {loanLengths.map((months) => <option value={months} selected={months === 60}>{t.monthsOption(months)}</option>)}
+      </select>
+    </div>
+
+    <fieldset class="field">
+      <legend>{t.vehicleLabel}</legend>
+      <label class="choice"><input type="radio" name="vehicle" value="new" checked /> {t.vehicleNew}</label>
+      <label class="choice"><input type="radio" name="vehicle" value="used" /> {t.vehicleUsed}</label>
+    </fieldset>
+
+    <div class="field">
+      <label for="own-rate">{t.ownRateLabel}</label>
+      <input id="own-rate" name="ownRate" type="number" inputmode="decimal" min="0" max="100" step="0.01" aria-describedby="own-rate-hint" />
+      <p id="own-rate-hint" class="note">{t.ownRateHint}</p>
+    </div>
+  </form>
+
+  <h2>{t.resultsHeading}</h2>
+  <noscript><p>{t.needsJavaScript}</p></noscript>
+  <p id="summary" aria-live="polite"></p>
+
+  <div class="table-wrapper">
+    <table>
+      <caption>{t.tableCaption}</caption>
+      <thead>
+        <tr>
+          <th scope="col">{t.scoreColumn}</th>
+          <th scope="col">{t.rateColumn}</th>
+          <th scope="col">{t.paymentColumn}</th>
+          <th scope="col">{t.interestColumn}</th>
+        </tr>
+      </thead>
+      <tbody>
+        {
+          AUTO_RATES.map((rate, index) => (
+            <tr data-row={index}>
+              <th scope="row">{rate.scoreRange}</th>
+              <td data-cell="rate">{t.empty}</td>
+              <td data-cell="payment">{t.empty}</td>
+              <td data-cell="interest">{t.empty}</td>
+            </tr>
+          ))
+        }
+        <tr id="own-rate-row" hidden>
+          <th scope="row">{t.ownRateRow}</th>
+          <td data-cell="rate">{t.empty}</td>
+          <td data-cell="payment">{t.empty}</td>
+          <td data-cell="interest">{t.empty}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h2>{t.aboutHeading}</h2>
+  <p>{t.aboutRates(AUTO_RATE_SOURCE.period, AUTO_RATE_SOURCE.scoreModel)}</p>
+  <p>{t.aboutFactors}</p>
+  <p class="note">
+    {t.sourceLabel} <a href={AUTO_RATE_SOURCE.url}>{AUTO_RATE_SOURCE.name}</a>{`, ${AUTO_RATE_SOURCE.period}. ${t.lastChecked(AUTO_RATE_SOURCE.lastChecked)}`}
+  </p>
+  <p><a href="/">{t.backHome}</a></p>
+</Base>
+
+<script>
+  import { AUTO_RATES } from '../data/auto-rates';
+  import type { VehicleType } from '../data/auto-rates';
+  import { monthlyPayment, totalInterest } from '../lib/loan';
+  import { text } from '../text/en';
+
+  const t = text.creditTool;
+  const dollars = new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' });
+  const wholeDollars = new Intl.NumberFormat('en-US', {
+    style: 'currency',
+    currency: 'USD',
+    maximumFractionDigits: 0,
+  });
+
+  const form = document.querySelector<HTMLFormElement>('#loan-form')!;
+  const summary = document.querySelector<HTMLElement>('#summary')!;
+  const ownRateRow = document.querySelector<HTMLTableRowElement>('#own-rate-row')!;
+  const amountInput = document.querySelector<HTMLInputElement>('#amount')!;
+  const ownRateInputField = document.querySelector<HTMLInputElement>('#own-rate')!;
+
+  function setCell(row: Element, cell: string, value: string) {
+    row.querySelector(`[data-cell="${cell}"]`)!.textContent = value;
+  }
+
+  function fillRow(row: Element, principal: number, rate: number, months: number) {
+    setCell(row, 'rate', `${rate.toFixed(2)}%`);
+    setCell(row, 'payment', dollars.format(monthlyPayment(principal, rate, months)));
+    setCell(row, 'interest', dollars.format(totalInterest(principal, rate, months)));
+  }
+
+  function clearRow(row: Element) {
+    for (const cell of ['rate', 'payment', 'interest']) setCell(row, cell, t.empty);
+  }
+
+  function update() {
+    const data = new FormData(form);
+    const principal = Number(data.get('amount'));
+    const months = Number(data.get('months'));
+    const vehicle = data.get('vehicle') as VehicleType;
+    const ownRateInput = String(data.get('ownRate')).trim();
+    const ownRate = Number(ownRateInput);
+    const rows = document.querySelectorAll('[data-row]');
+
+    const amountIsValid = Number.isFinite(principal) && principal > 0;
+    const ownRateIsValid = ownRateInput === '' || (Number.isFinite(ownRate) && ownRate >= 0 && ownRate <= 100);
+
+    amountInput.setAttribute('aria-invalid', String(!amountIsValid));
+    ownRateInputField.setAttribute('aria-invalid', String(!ownRateIsValid));
+    ownRateRow.hidden = true;
+
+    if (!amountIsValid) {
+      rows.forEach(clearRow);
+      summary.textContent = t.invalidAmount;
+      return;
+    }
+
+    AUTO_RATES.forEach((rate, index) => fillRow(rows[index], principal, rate[vehicle], months));
+
+    if (!ownRateIsValid) {
+      summary.textContent = t.invalidRate;
+      return;
+    }
+
+    const highest = AUTO_RATES[0];
+    const lowest = AUTO_RATES[AUTO_RATES.length - 1];
+    const difference =
+      totalInterest(principal, lowest[vehicle], months) - totalInterest(principal, highest[vehicle], months);
+    summary.textContent = t.summary(wholeDollars.format(difference), highest.scoreRange, lowest.scoreRange);
+
+    if (ownRateInput !== '') {
+      fillRow(ownRateRow, principal, ownRate, months);
+      ownRateRow.hidden = false;
+      const ownInterest = dollars.format(totalInterest(principal, ownRate, months));
+      summary.textContent += ` ${t.ownRateSummary(`${ownRate.toFixed(2)}%`, ownInterest)}`;
+    }
+  }
+
+  form.addEventListener('input', update);
+  form.addEventListener('submit', (event) => event.preventDefault());
+  update();
+</script>
+
+<style>
+  .note {
+    color: var(--muted);
+    font-size: 0.95rem;
+  }
+
+  form {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 1rem;
+  }
+
+  .field {
+    border: 0;
+    margin: 0 0 1rem;
+    padding: 0;
+  }
+
+  .field label,
+  legend {
+    display: block;
+    font-weight: 600;
+    margin-bottom: 0.25rem;
+    padding: 0;
+  }
+
+  .field .choice {
+    display: inline-block;
+    font-weight: 400;
+    margin-right: 1.5rem;
+  }
+
+  input[type='number'],
+  select {
+    width: 100%;
+    max-width: 20rem;
+    padding: 0.5rem;
+    font: inherit;
+    color: var(--text);
+    background: var(--background);
+    border: 1px solid var(--muted);
+    border-radius: 6px;
+  }
+
+  .field .note {
+    margin: 0.25rem 0 0;
+  }
+
+  .table-wrapper {
+    overflow-x: auto;
+  }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    background: var(--surface);
+  }
+
+  caption {
+    text-align: left;
+    color: var(--muted);
+    font-size: 0.95rem;
+    padding-bottom: 0.5rem;
+  }
+
+  th,
+  td {
+    padding: 0.5rem 0.3rem;
+    border-bottom: 1px solid var(--border);
+    font-size: 0.95rem;
+    text-align: right;
+    white-space: nowrap;
+  }
+
+  thead th {
+    vertical-align: bottom;
+    white-space: normal;
+  }
+
+  th:first-child {
+    text-align: left;
+  }
+
+  #own-rate-row th,
+  #own-rate-row td {
+    background: var(--highlight);
+    border-top: 2px solid var(--accent);
+    border-bottom: 2px solid var(--accent);
+    font-weight: 700;
+  }
+
+  #own-rate-row th {
+    border-left: 2px solid var(--accent);
+  }
+
+  #own-rate-row td:last-child {
+    border-right: 2px solid var(--accent);
+  }
+</style>
