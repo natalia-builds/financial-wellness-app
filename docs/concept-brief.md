@@ -36,7 +36,7 @@ Short, plain-language lessons paired with simple calculators for budgeting, debt
 
 ### Tier 3: Build Your Future
 
-Tools for setting and tracking long-term goals: emergency fund, retirement basics, homebuying readiness, and investing fundamentals.
+Tools for setting and tracking long-term goals: emergency fund, retirement basics, homebuying readiness, and investing fundamentals. This tier is educational only: it explains concepts and never recommends specific investments, products, or companies.
 
 ## Progression and Motivation
 
@@ -50,9 +50,16 @@ Progress is framed as personal milestones rather than points or streaks, for exa
 
 ## Success Measures (Draft)
 
+### Phase 1
+
+- Share of people who answer yes to "Was this helpful?" after a lesson or calculator
+- Anonymous usage counts, such as lessons finished and calculators used (totals only, with nothing tied to a person)
+- Share of people who say, in an optional anonymous question, that they've moved on to a new goal
+
+### Phase 2
+
 - Number of users matched to at least one resource
 - Share of users who report applying for or receiving a resource
-- Share of users who move from one tier to the next
 - User-reported financial confidence over time
 
 ## Decisions
@@ -60,6 +67,8 @@ Progress is framed as personal milestones rather than points or streaks, for exa
 - **Platform:** The pilot will be a mobile-friendly website. ([Issue #5](https://github.com/natalia-builds/financial-wellness-app/issues/5))
 - **User data:** Phase 1 will store no user data on a server, with no accounts. Anything saved stays in the person's own browser. Review before Phase 2. ([Issue #7](https://github.com/natalia-builds/financial-wellness-app/issues/7))
 - **Languages:** The project will support English only for the time being. Review before Phase 2. ([Issue #6](https://github.com/natalia-builds/financial-wellness-app/issues/6))
+- **Measuring progress:** Phase 1 will not track individuals. It will rely on anonymous totals and optional questions, including asking people directly whether they've moved on to a new goal.
+- **Tier 3 boundary:** Tier 3 is education only. Calculators work with the person's own numbers, the tool states clearly that it is educational, and it never recommends specific investments, products, or companies. Have a qualified person review the wording before launch.
 
 ## Open Questions
 
