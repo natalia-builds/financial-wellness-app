@@ -1,4 +1,5 @@
 ---
+import { Breadcrumbs as LibraryBreadcrumbs, BreadcrumbsItem } from 'accessible-astro-components';
 import { text } from '../text/en';
 
 export interface Crumb {
@@ -14,32 +15,30 @@ const { crumbs } = Astro.props;
 const trail: Crumb[] = [{ label: text.site.home, href: '/' }, ...crumbs];
 ---
 
-<nav aria-label={text.site.breadcrumbLabel}>
-  <ol>
-    {
-      trail.map((crumb) => (
-        <li>{crumb.href ? <a href={crumb.href}>{crumb.label}</a> : <span aria-current="page">{crumb.label}</span>}</li>
-      ))
-    }
-  </ol>
-</nav>
+<LibraryBreadcrumbs ariaLabel={text.site.breadcrumbLabel}>
+  {
+    trail.map((crumb) => (
+      <BreadcrumbsItem label={crumb.label} href={crumb.href} currentPage={!crumb.href}>
+        <span slot="separator" class="separator" aria-hidden="true">
+          ›
+        </span>
+      </BreadcrumbsItem>
+    ))
+  }
+</LibraryBreadcrumbs>
 
 <style>
-  ol {
-    list-style: none;
-    margin: 0.25rem 0 0;
-    padding: 0;
+  :global(.breadcrumbs) {
+    margin-top: 0.25rem;
     color: var(--muted);
     font-size: 0.95rem;
   }
 
-  li {
-    display: inline;
+  :global(.breadcrumbs span[aria-current='page']) {
+    font-weight: 400;
   }
 
-  li + li::before {
-    content: '›';
-    content: '›' / '';
-    margin: 0 0.5rem;
+  :global(.breadcrumbs a) {
+    color: var(--accent);
   }
 </style>

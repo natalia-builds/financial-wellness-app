@@ -1,6 +1,26 @@
 import { describe, expect, it } from 'vitest';
 import { AUTO_RATES } from '../data/auto-rates';
-import { monthlyPayment, totalInterest } from './loan';
+import { monthlyPayment, parseUserNumber, totalInterest } from './loan';
+
+describe('parseUserNumber', () => {
+  it('reads plain numbers', () => {
+    expect(parseUserNumber('25000')).toBe(25000);
+    expect(parseUserNumber('7.5')).toBe(7.5);
+    expect(parseUserNumber('0')).toBe(0);
+  });
+
+  it('accepts the symbols people naturally type', () => {
+    expect(parseUserNumber('$25,000')).toBe(25000);
+    expect(parseUserNumber(' 7.5% ')).toBe(7.5);
+  });
+
+  it('returns NaN for anything that is not a number', () => {
+    expect(parseUserNumber('')).toBeNaN();
+    expect(parseUserNumber('   ')).toBeNaN();
+    expect(parseUserNumber('abc')).toBeNaN();
+    expect(parseUserNumber('12abc')).toBeNaN();
+  });
+});
 
 describe('monthlyPayment', () => {
   it('matches a known loan: $25,000 at 6% for 60 months', () => {
