@@ -10,6 +10,13 @@ html:root {
   --color-primary-bg: var(--highlight);
   --color-primary-border: var(--accent);
 
+  --color-error-border: var(--error-border);
+
   --radius-s: 6px;
   --radius-m: 8px;
+}
+
+/* The library hard-codes this red inside Input, so a variable can't reach it. */
+html:root .input-group:has([aria-invalid='true']) {
+  --text-color: var(--error-text);
 }

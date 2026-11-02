@@ -42,6 +42,33 @@ It reads the Experian, Federal Reserve, and FDIC sources, compares them with `sr
 
 The Design System describes the site and doesn't control it. Changing it doesn't change the site. When the site's look changes, change the code through a pull request, then update the Design System to match. Mockups built from it still have to pass the accessibility rules before they're merged.
 
+## Switching to the fallback color scheme
+
+The site uses Option A, fresher teal. Option B, calm blue, is the approved fallback ([Issue #19](https://github.com/natalia-builds/financial-wellness-app/issues/19)). All the options are compared on the [color scheme canvas](https://claude.ai/artifact/N1N4Tg3J1A4fmDh6jcyZ36) (private).
+
+Switching only means changing color values, because the header, focus rings, and highlighted row all read from these variables. This was tested by loading Option B's values into the running credit score tool in light and dark, with no other code changes.
+
+| Variable | Light | Dark |
+| --- | --- | --- |
+| `--background` | `#faf8f3` | `#12181f` |
+| `--surface` | `#ffffff` | `#1b232d` |
+| `--text` | `#1c2b3a` | `#edf1f5` |
+| `--muted` | `#4f5f6f` | `#adb8c4` |
+| `--border` | `#d8dadb` | `#3a4552` |
+| `--accent` | `#1d5a99` | `#8cc4ff` |
+| `--highlight` | `#e0edf9` | `#1f3550` |
+| `--band` | `#1d4f86` | `#1b3350` |
+| `--band-text` | `#ffffff` | `#eaf3fc` |
+| `--band-link` | `#ffffff` | `#eaf3fc` |
+
+These values passed the contrast rules in `CLAUDE.md`. The error colors stay the same in both schemes.
+
+To switch:
+
+1. On a new branch, replace the values in `src/layouts/Base.astro`, in both the light and dark blocks.
+2. Check all three pages in a browser at a 375px phone width and in dark mode. Include keyboard focus in the header, an error in a field, and the "Your rate" row.
+3. Merge through a pull request, then update the Design System and the color scheme decision in the [concept brief](concept-brief.md).
+
 ## Running it locally
 
 ```bash
