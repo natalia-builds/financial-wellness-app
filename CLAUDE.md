@@ -1,6 +1,6 @@
 # Financial Wellness App
 
-A free, open-source tool that meets people wherever they are financially. See `docs/concept-brief.md` for the vision, principles, and decisions. Treat it as the source of truth.
+A free, open-source tool that meets people wherever they are financially. See `docs/concept-brief.md` for the vision, principles, and decisions. Treat it as the source of truth. See `docs/operations.md` for how the project runs: publishing, the monthly rate check, the Design System, and where things live.
 
 ## Accessibility
 
@@ -23,13 +23,26 @@ Everything we build must meet **WCAG 2.2 Level AA**. This applies to every page,
 - **Sourced numbers:** never invent rates or statistics. Keep them in `src/data/` with a named source, date, and period.
 - **Wording:** user-facing text lives in `src/text/en.ts`, separate from code.
 - **Components:** use `accessible-astro-components` for interactive components. Use plain HTML for simple elements such as tables and links. Before writing a custom component, check the library and say why it doesn't fit. Add the package when something first uses it, and test each component against the accessibility rules above.
+- **Library quirks:** `Input` has no number type, so use its text type with `inputmode="decimal"` and read values with `parseUserNumber`. `Input` also ignores a passed `aria-describedby`, so add hints from the page script and keep its `-validation` id in the list. There is no Select, so use a plain `select`. Library variables need bridging in `src/styles/theme.css`, or components use the library's purple.
 
 ## Workflow
 
 - Never commit directly to `main`. Use a short-lived branch and a pull request, and keep each pull request to one purpose.
 - Run `npm test` and `npm run build` before every commit. Money math needs automated tests.
-- Check changes in a browser, not only with tests.
-- Never commit secrets. Keep them in `.env`, which Git ignores.
+- Check changes in a browser, not only with tests. Test the awkward inputs, a 375px phone width, and dark mode.
+- Before a change that could affect existing pages, measure them first, then compare afterward.
+- Check money results against a separate calculation. Make sure a result can't look better than it is, such as savings shown without the debt still owed.
+- Never commit secrets. Keep them in `.env`, which Git ignores. This repository is public.
+- After merging, confirm the change on the live site.
+
+## Keeping knowledge
+
+Anything that matters must end up in the repository or on GitHub, because new sessions start with no memory of earlier ones.
+
+- Keep this file short. Link to details instead of copying them.
+- Update the brief in the same pull request as a change that alters a decision. Record why in the Issue or pull request.
+- Keep open work in GitHub Issues.
+- Give each fact one home, and mark replaced decisions as replaced.
 
 ## Explaining the work
 
