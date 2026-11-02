@@ -1,0 +1,96 @@
+/* Shared by every tool page: forms and results tables. */
+
+.note {
+  color: var(--muted);
+  font-size: 0.95rem;
+}
+
+form {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 1rem;
+}
+
+.field {
+  margin: 0 0 1rem;
+}
+
+.field > label,
+.field .input-group label,
+.field legend {
+  display: block;
+  font-weight: 600;
+  margin-bottom: 0.25rem;
+  padding: 0;
+}
+
+.field fieldset {
+  margin: 0;
+  min-width: 0;
+}
+
+.field .fieldset-group {
+  flex-direction: row;
+  gap: 1.5rem;
+}
+
+.field .input-group {
+  gap: 0;
+}
+
+.field .input-group small {
+  margin-top: 0.25rem;
+  font-size: 0.95rem;
+}
+
+.field .input-group input,
+.field select {
+  width: 100%;
+  max-width: 20rem;
+  padding: 0.5rem;
+  font: inherit;
+  color: var(--text);
+  background: var(--background);
+  border: 1px solid var(--muted);
+  border-radius: 6px;
+}
+
+.field .note {
+  margin: 0.25rem 0 0;
+}
+
+.table-wrapper {
+  overflow-x: auto;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  background: var(--surface);
+}
+
+caption {
+  text-align: left;
+  color: var(--muted);
+  font-size: 0.95rem;
+  padding-bottom: 0.5rem;
+}
+
+th,
+td {
+  padding: 0.5rem 0.3rem;
+  border-bottom: 1px solid var(--border);
+  font-size: 0.95rem;
+  text-align: right;
+  white-space: nowrap;
+}
+
+thead th {
+  vertical-align: bottom;
+  white-space: normal;
+}
+
+th:first-child {
+  text-align: left;
+}
