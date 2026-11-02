@@ -1,5 +1,7 @@
 ---
+import { Card } from 'accessible-astro-components';
 import Base from '../layouts/Base.astro';
+import '../styles/cards.css';
 import { text } from '../text/en';
 
 const t = text.home;
@@ -9,12 +11,16 @@ const t = text.home;
   <h1>{t.heading}</h1>
   <p>{t.intro}</p>
   <h2>{t.toolsHeading}</h2>
-  <p>
-    <a href="/credit-score-and-interest/">{t.creditToolLink}</a><br />
-    {t.creditToolSummary}
-  </p>
-  <p>
-    <a href="/debt-or-emergency-fund/">{t.debtToolLink}</a><br />
-    {t.debtToolSummary}
-  </p>
+  <ul class="tool-list">
+    <li>
+      <Card title={t.creditToolLink} url="/credit-score-and-interest/" img="/icons/gauge.svg" width={44} height={44}>
+        {t.creditToolSummary}
+      </Card>
+    </li>
+    <li>
+      <Card title={t.debtToolLink} url="/debt-or-emergency-fund/" img="/icons/scale.svg" width={44} height={44}>
+        {t.debtToolSummary}
+      </Card>
+    </li>
+  </ul>
 </Base>

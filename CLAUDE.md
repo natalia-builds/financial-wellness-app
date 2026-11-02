@@ -23,7 +23,7 @@ Everything we build must meet **WCAG 2.2 Level AA**. This applies to every page,
 - **Sourced numbers:** never invent rates or statistics. Keep them in `src/data/` with a named source, date, and period.
 - **Wording:** user-facing text lives in `src/text/en.ts`, separate from code.
 - **Components:** use `accessible-astro-components` for interactive components. Use plain HTML for simple elements such as tables and links. Before writing a custom component, check the library and say why it doesn't fit. Add the package when something first uses it, and test each component against the accessibility rules above.
-- **Library quirks:** `Input` has no number type, so use its text type with `inputmode="decimal"` and read values with `parseUserNumber`. `Input` also ignores a passed `aria-describedby`, so add hints from the page script and keep its `-validation` id in the list. There is no Select, so use a plain `select`. Library variables need bridging in `src/styles/theme.css`, or components use the library's purple.
+- **Library quirks:** `Input` has no number type, so use its text type with `inputmode="decimal"` and read values with `parseUserNumber`. `Input` also ignores a passed `aria-describedby`, so add hints from the page script and keep its `-validation` id in the list. There is no Select, so use a plain `select`. Library variables need bridging in `src/styles/theme.css`, or components use the library's purple. `Card` loads a placeholder from an outside site unless `img` is set, so always set it, and keep cards inside `.tool-list` so they get the overrides in `src/styles/cards.css`.
 
 ## Workflow
 

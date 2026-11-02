@@ -16,6 +16,8 @@ How the project runs day to day. For what it is and why, see the [concept brief]
 | Colors and the library connection | `src/layouts/Base.astro` and `src/styles/theme.css` |
 | Shared form and table styles | `src/styles/tools.css` |
 | Favicon | `public/favicon.svg`, with PNG copies beside it |
+| Tool card icons | `public/icons/`, from [Lucide](https://lucide.dev) with its license beside them |
+| Tool card styles | `src/styles/cards.css` |
 
 ## Publishing
 
@@ -67,7 +69,7 @@ These values passed the contrast rules in `CLAUDE.md`. The error colors stay the
 To switch:
 
 1. On a new branch, replace the values in `src/layouts/Base.astro`, in both the light and dark blocks.
-2. Change the favicon's `#00695a` to `#1d5a99` in `public/favicon.svg`. Remake `favicon-32.png` at 32px and `apple-touch-icon.png` at 180px with square corners and no transparency, because iOS rounds the corners itself.
+2. Change the favicon's `#00695a` to `#1d5a99` in `public/favicon.svg`. Remake `favicon-32.png` at 32px and `apple-touch-icon.png` at 180px with square corners and no transparency, because iOS rounds the corners itself. Change the same color in each file in `public/icons/`.
 3. Check all three pages in a browser at a 375px phone width and in dark mode. Include keyboard focus in the header, an error in a field, and the "Your rate" row.
 4. Merge through a pull request, then update the Design System and the color scheme decision in the [concept brief](concept-brief.md).
 
