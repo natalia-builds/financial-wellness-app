@@ -49,7 +49,7 @@ const sources = [CREDIT_CARD_RATE, SAVINGS_RATE];
   <noscript><p>{t.needsJavaScript}</p></noscript>
   <p id="summary" aria-live="polite"></p>
 
-  <div class="table-wrapper">
+  <div class="table-wrapper" tabindex="0" role="region" aria-labelledby="results-caption">
     <table>
       <caption id="results-caption">{t.tableCaption}</caption>
       <thead>
