@@ -104,7 +104,8 @@ As of November 2026, Phase 1 has started and the [site is live](https://financia
 
 - Finish the launch checks ([Issue #16](https://github.com/natalia-builds/financial-wellness-app/issues/16))
 - Build the Phase 1 success measures ([Issue #23](https://github.com/natalia-builds/financial-wellness-app/issues/23))
-- Continue Phase 1 work, starting with the ideas in [Issue #19](https://github.com/natalia-builds/financial-wellness-app/issues/19), [Issue #20](https://github.com/natalia-builds/financial-wellness-app/issues/20), and [Issue #21](https://github.com/natalia-builds/financial-wellness-app/issues/21)
+- Continue Phase 1 work, starting with the ideas in [Issue #20](https://github.com/natalia-builds/financial-wellness-app/issues/20) and [Issue #21](https://github.com/natalia-builds/financial-wellness-app/issues/21)
+- Group the home page tools by goal once there are enough tools ([Issue #29](https://github.com/natalia-builds/financial-wellness-app/issues/29))
 - Validate the concept with potential partners and users
 - Map the Tier 1 resource landscape in Multnomah County for Phase 2
 - Begin early Tier 1 partner conversations in parallel with Phase 1
