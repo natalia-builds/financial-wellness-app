@@ -37,7 +37,7 @@ Short, plain-language lessons paired with simple calculators for budgeting, debt
 
 ### Tier 3: Build Your Future
 
-Tools for setting and tracking long-term goals: emergency fund, retirement basics, homebuying readiness, and investing fundamentals. This tier is educational only: it explains concepts and never recommends specific investments, products, or companies.
+Tools for setting and tracking long-term goals: emergency fund, retirement basics, homebuying readiness, and investing fundamentals. This tier is educational: it defines investment types, explains concepts, and shares general best practices for planning ahead. It never tells someone what to invest in, and never recommends specific investments, products, or companies.
 
 ## Progression and Motivation
 
@@ -69,9 +69,9 @@ Progress is framed as personal milestones rather than points or streaks, for exa
 - **User data:** Phase 1 will store no user data on a server, with no accounts. Anything saved stays in the person's own browser. Review before Phase 2. ([Issue #7](https://github.com/natalia-builds/financial-wellness-app/issues/7))
 - **Languages:** The project will support English only for the time being. Review before Phase 2. ([Issue #6](https://github.com/natalia-builds/financial-wellness-app/issues/6))
 - **Measuring progress:** Phase 1 will not track individuals. It will rely on anonymous totals and optional questions, including asking people directly whether they've moved on to a new goal.
-- **Tier 3 boundary:** Tier 3 is education only. Calculators work with the person's own numbers, the tool states clearly that it is educational, and it never recommends specific investments, products, or companies. Have a qualified person review the wording before launch.
+- **Tier 3 boundary:** Tier 3 is education, not financial advice. It defines investment types and shares general best practices for planning for retirement, labeled as general guidance rather than personal advice. It never tells someone what to invest in, and never recommends specific investments, products, or companies. Calculators work with the person's own numbers, and the tool states clearly that it is educational. Have a qualified person review the wording before launch. This replaces the earlier education-only boundary, because people planning for retirement also need clear general guidance on how to start.
 - **Components:** New interactive components come from [Accessible Astro Components](https://github.com/incluud/accessible-astro-components), which is built for Astro, adds no dependencies, and focuses on accessibility. Existing plain HTML stays where it works. A library doesn't guarantee accessibility, so each component is still tested against WCAG 2.2 Level AA.
-- **Education-only tools:** The Tier 3 boundary also applies to Tier 2 tools. The debt and savings tool shows what happens with the person's own numbers and never says what to do.
+- **Tools show, people choose:** The Tier 3 boundary also applies to Tier 2. Tools show what happens with the person's own numbers and don't pick an option for them, as the debt and savings tool does.
 - **Hosting:** The site is built with Astro and hosted on Cloudflare Pages, which publishes `main` automatically. A Postgres database can be added later if the user data decision changes.
 - **Rate upkeep:** A monthly routine checks published rates against their sources and proposes changes in a pull request. A person reviews and merges every update. See [Operations](operations.md).
 
