@@ -17,7 +17,7 @@ Everything we build must meet **WCAG 2.2 Level AA**. This applies to every page,
 
 ## Working principles
 
-- **Education only:** explain concepts and show results using the person's own numbers. Never say what someone should do, and never recommend specific investments, products, or companies.
+- **Education, not advice:** define investment types, explain concepts, and show results using the person's own numbers. General best practices are fine when labeled as general guidance, not personal advice. Never tell someone what to invest in, and never recommend specific investments, products, or companies. Tools don't pick an option for the person.
 - **Dignity first:** use plain language that never shames or patronizes. Avoid industry labels such as "subprime" in user-facing text.
 - **Privacy by default:** Phase 1 stores no user data on a server, with no accounts. Don't add tracking of individuals.
 - **Sourced numbers:** never invent rates or statistics. Keep them in `src/data/` with a named source, date, and period.
