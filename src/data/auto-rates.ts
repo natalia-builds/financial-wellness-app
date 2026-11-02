@@ -15,7 +15,7 @@ export const AUTO_RATE_SOURCE = {
   period: 'Q2 2026',
   scoreModel: 'VantageScore 4.0',
   url: 'https://www.experian.com/blogs/ask-experian/auto-loan-rates-financing/',
-  lastChecked: 'November 1, 2026',
+  lastChecked: 'November 2, 2026',
 };
 
 // Ordered from the highest credit scores to the lowest.
