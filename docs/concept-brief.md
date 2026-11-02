@@ -71,11 +71,23 @@ Progress is framed as personal milestones rather than points or streaks, for exa
 - **Measuring progress:** Phase 1 will not track individuals. It will rely on anonymous totals and optional questions, including asking people directly whether they've moved on to a new goal.
 - **Tier 3 boundary:** Tier 3 is education only. Calculators work with the person's own numbers, the tool states clearly that it is educational, and it never recommends specific investments, products, or companies. Have a qualified person review the wording before launch.
 - **Components:** New interactive components come from [Accessible Astro Components](https://github.com/incluud/accessible-astro-components), which is built for Astro, adds no dependencies, and focuses on accessibility. Existing plain HTML stays where it works. A library doesn't guarantee accessibility, so each component is still tested against WCAG 2.2 Level AA.
+- **Education-only tools:** The Tier 3 boundary also applies to Tier 2 tools. The debt and savings tool shows what happens with the person's own numbers and never says what to do.
+- **Hosting:** The site is built with Astro and hosted on Cloudflare Pages, which publishes `main` automatically. A Postgres database can be added later if the user data decision changes.
+- **Rate upkeep:** A monthly routine checks published rates against their sources and proposes changes in a pull request. A person reviews and merges every update. See [Operations](operations.md).
 
 ## Open Questions
 
 - How will resource and eligibility data be sourced and kept current (partnership vs. self-maintained)? ([Issue #3](https://github.com/natalia-builds/financial-wellness-app/issues/3))
 - Who maintains the project long term (volunteers, a fiscal sponsor, a nonprofit)? ([Issue #4](https://github.com/natalia-builds/financial-wellness-app/issues/4))
+
+## Tier 1 Data Notes (Planning, Not Decided)
+
+The monthly rate check could grow into Tier 1, but the stakes are much higher. A slightly old interest rate is a small error, while wrongly telling someone in crisis that they qualify for help, or sending them to a closed office, can really hurt them. These notes feed into [Issue #3](https://github.com/natalia-builds/financial-wellness-app/issues/3):
+
+- Give each program its own record, with its source, effective date, and when a person last verified it.
+- Let automation flag that a source changed, and leave the rule change to a person, because eligibility rules need human judgment.
+- Show or hide information based on how recently it was verified, so stale details can't pass as current.
+- Look at partners first. 211info and county agencies may already maintain this data, and reusing it would likely be more accurate than monitoring many web pages.
 
 ## Next Steps
 
