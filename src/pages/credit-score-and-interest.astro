@@ -52,9 +52,9 @@ const loanLengths = [36, 48, 60, 72];
   <noscript><p>{t.needsJavaScript}</p></noscript>
   <p id="summary" aria-live="polite"></p>
 
-  <div class="table-wrapper">
+  <div class="table-wrapper" tabindex="0" role="region" aria-labelledby="results-caption">
     <table>
-      <caption>{t.tableCaption}</caption>
+      <caption id="results-caption">{t.tableCaption}</caption>
       <thead>
         <tr>
           <th scope="col">{t.scoreColumn}</th>
