@@ -25,8 +25,10 @@ const { title, description, crumbs } = Astro.props;
   <body>
     <SkipLink text={text.site.skipLink} />
     <header>
-      <a href="/" class="site-name">{text.site.name}</a>
-      {crumbs && <Breadcrumbs crumbs={crumbs} />}
+      <div class="header-content">
+        <a href="/" class="site-name">{text.site.name}</a>
+        {crumbs && <Breadcrumbs crumbs={crumbs} />}
+      </div>
     </header>
     <main id="main-content">
       <slot />
@@ -41,24 +43,34 @@ const { title, description, crumbs } = Astro.props;
 <style is:global>
   :root {
     color-scheme: light dark;
-    --background: #fbfaf7;
+    --background: #f1f8f5;
     --surface: #ffffff;
-    --text: #1f2a2e;
-    --muted: #55626a;
-    --border: #d5d9d8;
-    --accent: #0b6b5d;
-    --highlight: #e3f2ee;
+    --text: #16302c;
+    --muted: #48605b;
+    --border: #c5dcd5;
+    --accent: #00695a;
+    --highlight: #d3f0e7;
+    --band: #d3f0e7;
+    --band-text: #16302c;
+    --band-link: #00594c;
+    --error-text: #b3261e;
+    --error-border: #c9342b;
   }
 
   @media (prefers-color-scheme: dark) {
     :root {
-      --background: #14191b;
-      --surface: #1d2427;
-      --text: #eef1f0;
-      --muted: #aeb8bc;
-      --border: #3a4448;
-      --accent: #6fd6c4;
-      --highlight: #1f3a36;
+      --background: #101c1b;
+      --surface: #182725;
+      --text: #ecf4f1;
+      --muted: #a9bcb7;
+      --border: #33504a;
+      --accent: #63dcc6;
+      --highlight: #1b4039;
+      --band: #173330;
+      --band-text: #ecf4f1;
+      --band-link: #63dcc6;
+      --error-text: #ffb4ab;
+      --error-border: #ff8f85;
     }
   }
 
@@ -77,7 +89,12 @@ const { title, description, crumbs } = Astro.props;
     line-height: 1.6;
   }
 
-  header,
+  header {
+    background: var(--band);
+    color: var(--band-text);
+  }
+
+  .header-content,
   main,
   footer {
     max-width: 44rem;
@@ -90,6 +107,7 @@ const { title, description, crumbs } = Astro.props;
   }
 
   .site-name {
+    color: var(--band-link);
     font-weight: 700;
     text-decoration: none;
   }
@@ -115,5 +133,14 @@ const { title, description, crumbs } = Astro.props;
   :focus-visible {
     outline: 3px solid var(--accent);
     outline-offset: 2px;
+  }
+
+  header :focus-visible {
+    outline-color: var(--band-text);
+  }
+
+  /* Drawn inside the link, so it never sits on the header band. */
+  .skip-link a:focus-visible {
+    outline-offset: -5px;
   }
 </style>
