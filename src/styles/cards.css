@@ -1,0 +1,54 @@
+/* Adapts the library's Card to the home page. Its image area holds a small icon. */
+
+.tool-list {
+  display: grid;
+  gap: 1rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.tool-list .card {
+  flex-direction: row;
+  gap: 1rem;
+  max-inline-size: none;
+  padding: 1rem;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-m);
+  transition: none;
+}
+
+.tool-list .card .image {
+  flex: none;
+  inline-size: 2.75rem;
+  block-size: 2.75rem;
+}
+
+.tool-list .card .image img {
+  display: block;
+  transform: none;
+  transition: none;
+}
+
+.tool-list .card .content {
+  gap: 0.25rem;
+  padding: 0;
+}
+
+.tool-list .card .heading {
+  margin: 0;
+  font-size: 1.125rem;
+  font-weight: 600;
+  line-height: 1.35;
+}
+
+.tool-list .card a {
+  color: var(--accent);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.tool-list .card .description {
+  margin: 0;
+}
