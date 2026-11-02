@@ -89,8 +89,20 @@ The monthly rate check could grow into Tier 1, but the stakes are much higher. A
 - Show or hide information based on how recently it was verified, so stale details can't pass as current.
 - Look at partners first. 211info and county agencies may already maintain this data, and reusing it would likely be more accurate than monitoring many web pages.
 
+## Current Status
+
+As of November 2026, Phase 1 has started and the [site is live](https://financial-wellness-app.pages.dev).
+
+- **Built:** two tools, [how a credit score affects what you pay](https://financial-wellness-app.pages.dev/credit-score-and-interest/) and [paying down debt or building savings](https://financial-wellness-app.pages.dev/debt-or-emergency-fund/).
+- **Why these first:** conversations with many people about finance basics pointed to these two topics, so building started without a separate round of validation interviews.
+- **Not built yet:** the Phase 1 success measures ([Issue #23](https://github.com/natalia-builds/financial-wellness-app/issues/23)), lessons, goal tools, and Tier 1.
+- **Before sharing widely:** the launch checks in [Issue #16](https://github.com/natalia-builds/financial-wellness-app/issues/16), including a qualified review of the wording.
+
 ## Next Steps
 
-- Validate the concept with a few potential partners and users
-- Define the Phase 1 MVP for Tiers 2 and 3, then map the Tier 1 resource landscape in Multnomah County for Phase 2
+- Finish the launch checks ([Issue #16](https://github.com/natalia-builds/financial-wellness-app/issues/16))
+- Build the Phase 1 success measures ([Issue #23](https://github.com/natalia-builds/financial-wellness-app/issues/23))
+- Continue Phase 1 work, starting with the ideas in [Issue #19](https://github.com/natalia-builds/financial-wellness-app/issues/19), [Issue #20](https://github.com/natalia-builds/financial-wellness-app/issues/20), and [Issue #21](https://github.com/natalia-builds/financial-wellness-app/issues/21)
+- Validate the concept with potential partners and users
+- Map the Tier 1 resource landscape in Multnomah County for Phase 2
 - Begin early Tier 1 partner conversations in parallel with Phase 1
