@@ -24,8 +24,14 @@ export const text = {
   debtTool: {
     title: 'Paying down debt or building savings',
     description: 'See what happens when extra money goes toward debt, savings, or both.',
-    intro:
-      'If you have extra money each month, you can put it toward debt, into savings, or some of each. Debt charges you interest and savings earns it, so the rates matter. Savings can also help when something unexpected happens, so the cost doesn\'t go back on your debt.',
+    lesson: {
+      title: 'Lesson: how interest works on debt and on savings',
+      paragraphs: [
+        'Debt and savings both use interest, but it works in opposite directions. When you owe money, the lender charges you interest, which is a percentage of what you still owe. The longer a balance stays, the more that adds up. When you save, the bank pays you interest, a percentage of what you have saved.',
+        'If you have extra money each month, you can put it toward debt, into savings, or some of each. Money paid toward debt lowers the balance that interest is charged on. Money put into savings builds a cushion and earns a little interest of its own. The two rates are often different sizes, which is why the rates you enter below matter.',
+        'A cushion matters because life is unpredictable. A car repair or a medical bill can show up at any time. Without savings, that cost may land on a credit card and add to the debt, along with its interest. With some savings set aside, it may not. The tool below lets you see both paths with your own numbers.',
+      ],
+    },
     noRightAnswer: 'There is no single right answer. This tool shows what can happen, and the choice is yours.',
     formHeading: 'Try your numbers',
     privacy: 'Your numbers stay on your device. Nothing you type here is saved or sent anywhere.',
@@ -90,8 +96,14 @@ export const text = {
   creditTool: {
     title: 'How your credit score affects what you pay',
     description: 'See what the same car loan can cost at different credit scores.',
-    intro:
-      'When you borrow money, you pay extra for it. That extra is called interest. Lenders often charge lower rates to people with higher credit scores, so the same loan can cost very different amounts.',
+    lesson: {
+      title: 'Lesson: what a credit score is, and why rates differ',
+      paragraphs: [
+        'When you borrow money, you pay extra for it. That extra is called interest. A credit score is a number that summarizes your borrowing history, such as whether past loans and cards were paid on time and how much of your available credit you use.',
+        'A lender can\'t know ahead of time whether a loan will be repaid, so many lenders use credit scores to estimate that risk. A higher score usually points to lower risk, and lenders often offer lower rates to match. A lower score usually points to higher risk, and lenders often charge higher rates to make up for it. Every lender weighs scores in its own way, so rates can differ from place to place.',
+        'A rate that looks only a little higher can add up. Interest is charged every month on what you still owe, so over the life of a loan a small difference in the rate becomes a real difference in the total cost. The tool below shows this with your own numbers.',
+      ],
+    },
     dignity: 'A credit score is a measure of borrowing history. It says nothing about your worth.',
     formHeading: 'Try a loan',
     privacy: 'Your numbers stay on your device. Nothing you type here is saved or sent anywhere.',

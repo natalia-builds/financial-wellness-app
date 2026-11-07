@@ -1,5 +1,6 @@
 ---
 import { Input } from 'accessible-astro-components';
+import Lesson from '../components/Lesson.astro';
 import Base from '../layouts/Base.astro';
 import { CREDIT_CARD_RATE, SAVINGS_RATE } from '../data/reference-rates';
 import { PLANS, SURPRISE_MONTH } from '../lib/debt-vs-savings';
@@ -12,7 +13,7 @@ const sources = [CREDIT_CARD_RATE, SAVINGS_RATE];
 
 <Base title={t.title} description={t.description} crumbs={[{ label: t.title }]}>
   <h1>{t.title}</h1>
-  <p>{t.intro}</p>
+  <Lesson title={t.lesson.title} paragraphs={t.lesson.paragraphs} />
   <p>{t.noRightAnswer}</p>
 
   <h2>{t.formHeading}</h2>

@@ -20,3 +20,32 @@ html:root {
 html:root .input-group:has([aria-invalid='true']) {
   --text-color: var(--error-text);
 }
+
+/* The lesson box (Accordion). The library hard-codes its own colors and spacing, so variables can't reach them. */
+.lesson {
+  margin: 1rem 0;
+  background: var(--surface);
+  border: 1px solid var(--muted);
+  border-radius: 8px;
+  padding: 0 1rem;
+}
+
+.lesson .accordion {
+  margin: 0;
+}
+
+/* The site's own h2 spacing would leave a gap above the title. */
+.lesson summary .heading {
+  margin: 0;
+  line-height: 1.35;
+}
+
+/* The library's blue-gray hover color isn't in the site's palette. */
+.lesson summary:hover,
+.lesson summary:focus-visible {
+  color: var(--text);
+}
+
+.lesson .content p {
+  margin: 0 0 0.75rem;
+}
