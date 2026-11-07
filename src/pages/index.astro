@@ -1,10 +1,12 @@
 ---
 import { Card } from 'accessible-astro-components';
 import Base from '../layouts/Base.astro';
+import { groupTools } from '../lib/tools';
 import '../styles/cards.css';
 import { text } from '../text/en';
 
 const t = text.home;
+const tools = groupTools().flatMap((group) => group.tools);
 ---
 
 <Base title={t.title} description={t.description}>
@@ -12,15 +14,15 @@ const t = text.home;
   <p>{t.intro}</p>
   <h2>{t.toolsHeading}</h2>
   <ul class="tool-list">
-    <li>
-      <Card title={t.creditToolLink} url="/credit-score-and-interest/" img="/icons/gauge.svg" width={44} height={44}>
-        {t.creditToolSummary}
-      </Card>
-    </li>
-    <li>
-      <Card title={t.debtToolLink} url="/debt-or-emergency-fund/" img="/icons/scale.svg" width={44} height={44}>
-        {t.debtToolSummary}
-      </Card>
-    </li>
+    {
+      tools.map((tool) => (
+        <li>
+          <Card title={text.toolList[tool.key].title} url={tool.url} img={tool.icon} width={44} height={44}>
+            {text.toolList[tool.key].summary}
+          </Card>
+        </li>
+      ))
+    }
   </ul>
+  <p><a href="/tools/">{t.allToolsLink}</a></p>
 </Base>
