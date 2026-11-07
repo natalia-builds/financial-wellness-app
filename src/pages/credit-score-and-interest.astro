@@ -10,7 +10,7 @@ const t = text.creditTool;
 const loanLengths = [36, 48, 60, 72];
 ---
 
-<Base title={t.title} description={t.description} crumbs={[{ label: t.title }]}>
+<Base title={t.title} description={t.description} crumbs={[{ label: text.toolsPage.crumb, href: '/tools/' }, { label: t.title }]}>
   <h1>{t.title}</h1>
   <Lesson title={t.lesson.title} paragraphs={t.lesson.paragraphs} />
   <p>{t.dignity}</p>

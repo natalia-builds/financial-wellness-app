@@ -98,9 +98,10 @@ The monthly rate check could grow into Tier 1, but the stakes are much higher. A
 
 As of November 2026, Phase 1 has started and the [site is live](https://financial-wellness-app.pages.dev).
 
-- **Built:** two tools, [how a credit score affects what you pay](https://financial-wellness-app.pages.dev/credit-score-and-interest/) and [paying down debt or building savings](https://financial-wellness-app.pages.dev/debt-or-emergency-fund/).
+- **Built:** two tools, each with a short lesson, [how a credit score affects what you pay](https://financial-wellness-app.pages.dev/credit-score-and-interest/) and [paying down debt or building savings](https://financial-wellness-app.pages.dev/debt-or-emergency-fund/).
 - **Why these first:** conversations with many people about finance basics pointed to these two topics, so building started without a separate round of validation interviews.
-- **Not built yet:** the Phase 1 success measures ([Issue #23](https://github.com/natalia-builds/financial-wellness-app/issues/23)), lessons, the tools page, the quiz, goal tools, and Tier 1.
+- **Also built:** a [tools page](https://financial-wellness-app.pages.dev/tools/) that groups the tools from simplest to most advanced.
+- **Not built yet:** the Phase 1 success measures ([Issue #23](https://github.com/natalia-builds/financial-wellness-app/issues/23)), the quiz, goal tools, and Tier 1.
 - **Before sharing widely:** the launch checks in [Issue #16](https://github.com/natalia-builds/financial-wellness-app/issues/16), including a qualified review of the wording.
 
 ## Phase 1 Roadmap
@@ -117,7 +118,7 @@ Issues marked "Ready to build" have the goal, files, and checks needed to start 
 
 ## Next Steps
 
-- Work through the [Phase 1 Roadmap](#phase-1-roadmap), starting with the Foundation milestone
+- Work through the [Phase 1 Roadmap](#phase-1-roadmap). Foundation is done, so Ready to share is next
 - Validate the concept with potential partners and users
 - Map the Tier 1 resource landscape in Multnomah County for Phase 2
 - Begin early Tier 1 partner conversations in parallel with Phase 1

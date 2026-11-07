@@ -1,0 +1,32 @@
+---
+import { Card } from 'accessible-astro-components';
+import Base from '../layouts/Base.astro';
+import { groupTools } from '../lib/tools';
+import '../styles/cards.css';
+import { text } from '../text/en';
+
+const t = text.toolsPage;
+const groups = groupTools();
+---
+
+<Base title={t.title} description={t.description} crumbs={[{ label: t.crumb }]}>
+  <h1>{t.title}</h1>
+  <p>{t.intro}</p>
+  {
+    groups.map((group) => (
+      <section aria-labelledby={`group-${group.id}`}>
+        <h2 id={`group-${group.id}`}>{t.groups[group.id].name}</h2>
+        <p>{t.groups[group.id].description}</p>
+        <ul class="tool-list">
+          {group.tools.map((tool) => (
+            <li>
+              <Card title={text.toolList[tool.key].title} url={tool.url} img={tool.icon} width={44} height={44}>
+                {text.toolList[tool.key].summary}
+              </Card>
+            </li>
+          ))}
+        </ul>
+      </section>
+    ))
+  }
+</Base>

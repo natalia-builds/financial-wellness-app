@@ -16,10 +16,38 @@ export const text = {
     heading: 'Understand your money, one step at a time',
     intro: 'Free, plain-language tools with no ads and no sign-up.',
     toolsHeading: 'Tools',
-    creditToolLink: 'How your credit score affects what you pay',
-    creditToolSummary: 'See what the same car loan can cost at different credit scores.',
-    debtToolLink: 'Paying down debt or building savings',
-    debtToolSummary: 'See what happens when extra money goes toward debt, savings, or both.',
+    allToolsLink: 'See all tools',
+  },
+  // Card wording for each tool in src/lib/tools.ts, found by the tool's key.
+  toolList: {
+    credit: {
+      title: 'How your credit score affects what you pay',
+      summary: 'See what the same car loan can cost at different credit scores.',
+    },
+    debt: {
+      title: 'Paying down debt or building savings',
+      summary: 'See what happens when extra money goes toward debt, savings, or both.',
+    },
+  },
+  toolsPage: {
+    title: 'Tools',
+    description: 'All of the free tools, listed from the basics to planning ahead.',
+    crumb: 'Tools',
+    intro: 'Each tool lets you try your own numbers. Nothing you type is saved or sent anywhere.',
+    groups: {
+      'getting-started': {
+        name: 'Getting started',
+        description: 'Understanding the basics.',
+      },
+      'building-habits': {
+        name: 'Building habits',
+        description: 'Everyday choices with your money.',
+      },
+      'planning-ahead': {
+        name: 'Planning ahead',
+        description: 'Longer-term goals.',
+      },
+    },
   },
   debtTool: {
     title: 'Paying down debt or building savings',

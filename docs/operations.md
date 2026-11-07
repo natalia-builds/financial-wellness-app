@@ -18,6 +18,7 @@ How the project runs day to day. For what it is and why, see the [concept brief]
 | Favicon | `public/favicon.svg`, with PNG copies beside it |
 | Tool card icons | `public/icons/`, from [Lucide](https://lucide.dev) with its license beside them |
 | Tool card styles | `src/styles/cards.css` |
+| The list of tools and their groups | `src/lib/tools.ts`, used by the home page and the tools page. Add a new tool here, with its wording in `src/text/en.ts` |
 
 ## Publishing
 
