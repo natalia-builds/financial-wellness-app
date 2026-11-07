@@ -52,3 +52,12 @@
 .tool-list .card .description {
   margin: 0;
 }
+
+/* High contrast mode removes the library's focus shadow, and the library turns off
+   the link's outline, so a focused card would show nothing. Outline it instead. */
+@media (forced-colors: active) {
+  .tool-list .card:focus-within {
+    outline: 3px solid Highlight;
+    outline-offset: 2px;
+  }
+}
