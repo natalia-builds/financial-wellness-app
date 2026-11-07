@@ -1,0 +1,52 @@
+---
+import { Accordion, AccordionItem } from 'accessible-astro-components';
+import { LESSONS_COLLAPSED_KEY } from '../lib/lesson-preference';
+
+interface Props {
+  title: string;
+  paragraphs: string[];
+}
+
+const { title, paragraphs } = Astro.props;
+---
+
+<div class="lesson">
+  <Accordion>
+    <AccordionItem title={title} headingLevel="h2" headingSize="h4" variant="chevron" open>
+      {paragraphs.map((paragraph) => <p>{paragraph}</p>)}
+    </AccordionItem>
+  </Accordion>
+</div>
+
+{/* Runs as soon as the lesson is drawn, so the page never flashes open and then closed.
+    It can't import code, so it only receives the storage key. With JavaScript off, the lesson stays open. */}
+<script is:inline define:vars={{ key: LESSONS_COLLAPSED_KEY }}>
+  try {
+    if (localStorage.getItem(key) === 'true') {
+      document.querySelectorAll('.lesson details').forEach((lesson) => {
+        lesson.open = false;
+      });
+    }
+  } catch (error) {
+    // Storage is blocked, so the lesson stays open.
+  }
+</script>
+
+<script>
+  import { saveLessonsCollapsed } from '../lib/lesson-preference';
+
+  const lessons = document.querySelectorAll<HTMLDetailsElement>('.lesson details');
+
+  // A click on the heading (or Enter or Space while it has focus) is about to flip the lesson.
+  // So a lesson that is open right now is the one being collapsed.
+  lessons.forEach((lesson) => {
+    lesson.querySelector('summary')!.addEventListener('click', () => {
+      const collapsing = lesson.open;
+      saveLessonsCollapsed(collapsing);
+      // The browser flips the clicked lesson itself; only the others need to follow.
+      lessons.forEach((other) => {
+        if (other !== lesson) other.open = !collapsing;
+      });
+    });
+  });
+</script>

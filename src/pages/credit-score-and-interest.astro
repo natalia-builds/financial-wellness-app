@@ -1,5 +1,6 @@
 ---
 import { Fieldset, Input, Radio } from 'accessible-astro-components';
+import Lesson from '../components/Lesson.astro';
 import Base from '../layouts/Base.astro';
 import { AUTO_RATES, AUTO_RATE_SOURCE } from '../data/auto-rates';
 import '../styles/tools.css';
@@ -11,7 +12,7 @@ const loanLengths = [36, 48, 60, 72];
 
 <Base title={t.title} description={t.description} crumbs={[{ label: t.title }]}>
   <h1>{t.title}</h1>
-  <p>{t.intro}</p>
+  <Lesson title={t.lesson.title} paragraphs={t.lesson.paragraphs} />
   <p>{t.dignity}</p>
 
   <h2>{t.formHeading}</h2>
