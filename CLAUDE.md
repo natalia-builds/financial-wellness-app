@@ -30,6 +30,7 @@ Everything we build must meet **WCAG 2.2 Level AA**. This applies to every page,
 - Never commit directly to `main`. Use a short-lived branch and a pull request, and keep each pull request to one purpose.
 - Run `npm test` and `npm run build` before every commit. Money math needs automated tests.
 - Check changes in a browser, not only with tests. Test the awkward inputs, a 375px phone width, and dark mode.
+- Before opening a pull request that changes anything on a page, run the [accessibility checks](docs/accessibility-checks.md) on every page it touches, and list the results by WCAG criterion in the pull request.
 - Before a change that could affect existing pages, measure them first, then compare afterward.
 - Check money results against a separate calculation. Make sure a result can't look better than it is, such as savings shown without the debt still owed.
 - Never commit secrets. Keep them in `.env`, which Git ignores. This repository is public.
