@@ -4,6 +4,7 @@
 export const text = {
   site: {
     name: 'Financial Wellness',
+    titleSeparator: ' – ',
     home: 'Home',
     breadcrumbLabel: 'Breadcrumb',
     skipLink: 'Skip to main content',

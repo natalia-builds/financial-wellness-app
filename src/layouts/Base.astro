@@ -2,6 +2,7 @@
 import { SkipLink } from 'accessible-astro-components';
 import Breadcrumbs from '../components/Breadcrumbs.astro';
 import type { Crumb } from '../components/Breadcrumbs.astro';
+import { pageTitle } from '../lib/page-title';
 import '../styles/theme.css';
 import { text } from '../text/en';
 
@@ -20,7 +21,7 @@ const { title, description, crumbs } = Astro.props;
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="description" content={description} />
-    <title>{title}</title>
+    <title>{pageTitle(title)}</title>
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
     <link rel="icon" href="/favicon-32.png" sizes="32x32" type="image/png" />
     <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
