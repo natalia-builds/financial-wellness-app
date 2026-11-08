@@ -18,6 +18,7 @@ export interface Tool {
 
 export const TOOLS: Tool[] = [
   { key: 'credit', url: '/credit-score-and-interest/', icon: '/icons/gauge.svg', group: 'getting-started' },
+  { key: 'budget', url: '/budget/', icon: '/icons/wallet.svg', group: 'getting-started' },
   { key: 'debt', url: '/debt-or-emergency-fund/', icon: '/icons/scale.svg', group: 'building-habits' },
 ];
 

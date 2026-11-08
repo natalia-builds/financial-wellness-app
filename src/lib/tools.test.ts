@@ -29,10 +29,10 @@ describe('TOOLS', () => {
     expect(new Set(TOOLS.map((t) => t.url)).size).toBe(TOOLS.length);
   });
 
-  it('puts the credit score tool under Getting started and the debt tool under Building habits', () => {
+  it('puts the credit score and budget tools under Getting started and the debt tool under Building habits', () => {
     const groups = groupTools();
     expect(groups.map((g) => [g.id, g.tools.map((t) => t.key)])).toEqual([
-      ['getting-started', ['credit']],
+      ['getting-started', ['credit', 'budget']],
       ['building-habits', ['debt']],
     ]);
   });
