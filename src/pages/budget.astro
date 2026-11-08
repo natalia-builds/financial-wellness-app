@@ -1,0 +1,413 @@
+---
+import { Button } from 'accessible-astro-components';
+import BudgetLine from '../components/BudgetLine.astro';
+import Feedback from '../components/Feedback.astro';
+import Lesson from '../components/Lesson.astro';
+import Base from '../layouts/Base.astro';
+import { COST_LINES, INCOME_LINES, MAX_OWN_COSTS } from '../lib/budget';
+import '../styles/tools.css';
+import { text } from '../text/en';
+
+const t = text.budgetTool;
+const ownCosts = Array.from({ length: MAX_OWN_COSTS }, (_, index) => index + 1);
+const hintFor = (id: string) => (t.lines as Record<string, { hint?: string }>)[id].hint;
+---
+
+<Base title={t.title} description={t.description} crumbs={[{ label: text.toolsPage.crumb, href: '/tools/' }, { label: t.title }]}>
+  <h1>{t.title}</h1>
+  <Lesson title={t.lesson.title} paragraphs={t.lesson.paragraphs} />
+
+  <h2>{t.formHeading}</h2>
+  <p class="note">{t.privacy}</p>
+  <p class="note">{t.startsEmpty}</p>
+
+  <form id="budget-form" novalidate>
+    <h3>{t.incomeHeading}</h3>
+    {INCOME_LINES.map((id) => <BudgetLine id={id} kind="in" legend={t.lines[id].name} hint={hintFor(id)} />)}
+
+    <h3>{t.costsHeading}</h3>
+    {COST_LINES.map((id) => <BudgetLine id={id} kind="out" legend={t.lines[id].name} hint={hintFor(id)} />)}
+
+    {/* Hidden until the script runs: without JavaScript the buttons would do nothing. */}
+    <div id="own-costs" hidden>
+      <h3>{t.ownCostsHeading}</h3>
+      <p class="note">{t.ownCostsIntro}</p>
+      {ownCosts.map((position) => <BudgetLine id={`own-${position}`} kind="out" legend={t.ownCostLegend(position)} own hidden />)}
+      <p>
+        <Button id="add-cost" htmlType="button" variant="outlined">{t.addCost}</Button>
+      </p>
+      <p id="cost-limit" class="note" hidden>{t.limitReached}</p>
+    </div>
+  </form>
+
+  {/* Announces adding and removing a cost. It is on the page from the start so screen readers pick up the change. */}
+  <div id="cost-status" class="visually-hidden" role="status"></div>
+
+  <h2>{t.resultsHeading}</h2>
+  <noscript><p>{t.needsJavaScript}</p></noscript>
+  {/* Visible at once. The live region below repeats it, but only after typing pauses. */}
+  <p id="summary">{t.emptyResults}</p>
+  <div id="announcer" class="visually-hidden" role="status"></div>
+  <p id="help" hidden>
+    {t.help.before}<a href={t.help.linkUrl}>{t.help.linkText}</a>{t.help.after}
+  </p>
+  <p id="problem-note" class="note" hidden>{t.problemFields}</p>
+  <p id="no-income-note" class="note" hidden>{t.noIncomeNote}</p>
+
+  <div id="income-table" class="table-wrapper" tabindex="0" role="region" aria-labelledby="income-caption" hidden>
+    <table>
+      <caption id="income-caption">{t.incomeTableCaption}</caption>
+      <thead>
+        <tr>
+          <th scope="col">{t.lineColumn}</th>
+          <th scope="col">{t.monthlyColumn}</th>
+          <th scope="col" data-share-column>{t.shareColumn}</th>
+        </tr>
+      </thead>
+      <tbody></tbody>
+      <tfoot></tfoot>
+    </table>
+  </div>
+
+  <div id="costs-table" class="table-wrapper" tabindex="0" role="region" aria-labelledby="costs-caption" hidden>
+    <table>
+      <caption id="costs-caption">{t.costsTableCaption}</caption>
+      <thead>
+        <tr>
+          <th scope="col">{t.lineColumn}</th>
+          <th scope="col">{t.monthlyColumn}</th>
+          <th scope="col" data-share-column>{t.shareColumn}</th>
+        </tr>
+      </thead>
+      <tbody></tbody>
+      <tfoot></tfoot>
+    </table>
+  </div>
+
+  <Feedback tool="budget" />
+
+  <h2>{t.aboutHeading}</h2>
+  <p>{t.aboutIntro}</p>
+  <ul>
+    {t.assumptions.map((assumption) => <li>{assumption}</li>)}
+  </ul>
+</Base>
+
+<script>
+  import { calculateBudget, COST_LINES, INCOME_LINES, MAX_OWN_COSTS, readAmount } from '../lib/budget';
+  import type { BudgetLine, Frequency } from '../lib/budget';
+  import { createUsedReporter } from '../lib/count';
+  import { setFieldError } from '../lib/fields';
+  import { text } from '../text/en';
+
+  const t = text.budgetTool;
+  const dollars = new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' });
+  // Used for amounts that can be negative, so a shortfall shows a minus sign as well as words.
+  const signedDollars = new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD', signDisplay: 'negative' });
+  const wholeDollars = new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD', maximumFractionDigits: 0 });
+  const percent = new Intl.NumberFormat('en-US', { style: 'percent', maximumFractionDigits: 0 });
+
+  const form = document.querySelector<HTMLFormElement>('#budget-form')!;
+  const summary = document.querySelector<HTMLElement>('#summary')!;
+  const announcer = document.querySelector<HTMLElement>('#announcer')!;
+  const help = document.querySelector<HTMLElement>('#help')!;
+  const problemNote = document.querySelector<HTMLElement>('#problem-note')!;
+  const noIncomeNote = document.querySelector<HTMLElement>('#no-income-note')!;
+  const costStatus = document.querySelector<HTMLElement>('#cost-status')!;
+  const ownCosts = document.querySelector<HTMLElement>('#own-costs')!;
+  const addButton = document.querySelector<HTMLButtonElement>('#add-cost')!;
+  const costLimit = document.querySelector<HTMLElement>('#cost-limit')!;
+
+  const ownRows = [...document.querySelectorAll<HTMLElement>('[data-own]')];
+  const fixedNames: Record<string, string> = Object.fromEntries(
+    [...INCOME_LINES, ...COST_LINES].map((id) => [id, t.lines[id].name]),
+  );
+
+  const input = (id: string) => document.querySelector<HTMLInputElement>(`#${id}`)!;
+  const select = (id: string) => document.querySelector<HTMLSelectElement>(`#${id}`)!;
+  const isVisible = (row: HTMLElement) => !row.hidden;
+  const capitalize = (words: string) => words.charAt(0).toUpperCase() + words.slice(1);
+
+  // A short amount for sentences. Under a dollar it keeps the cents, so a small
+  // shortfall is never rounded away to "$0".
+  const brief = (amount: number) => (amount < 1 ? dollars.format(amount) : wholeDollars.format(amount));
+
+  // The name of one of the person's own costs, or a stand-in if they left it blank.
+  function ownCostName(row: HTMLElement, position: number): string {
+    const typed = input(`${row.dataset.line}-name`).value.trim();
+    return typed === '' ? t.ownCostFallback(position) : typed;
+  }
+
+  function lineLabel(row: HTMLElement): string {
+    const id = row.dataset.line!;
+    if (row.hasAttribute('data-own')) return capitalize(ownCostName(row, ownRows.indexOf(row) + 1));
+    return fixedNames[id];
+  }
+
+  function shareText(share: number): string {
+    if (share > 0 && share < 0.005) return t.lessThanOnePercent;
+    return percent.format(Math.abs(share) < 0.005 ? 0 : share);
+  }
+
+  function addCell(row: HTMLTableRowElement, tag: 'th' | 'td', content: string, scope?: string) {
+    const cell = document.createElement(tag);
+    if (scope) cell.setAttribute('scope', scope);
+    cell.textContent = content;
+    row.appendChild(cell);
+  }
+
+  interface TableRow {
+    label: string;
+    monthly: string;
+    share: string | null;
+  }
+
+  // Fills a table with rows and total rows. Names the person typed go in with
+  // textContent, so they are only ever shown as plain text.
+  function fillTable(wrapperId: string, body: TableRow[], footer: TableRow[], showShares: boolean) {
+    const wrapper = document.querySelector<HTMLElement>(`#${wrapperId}`)!;
+    wrapper.hidden = body.length === 0;
+    wrapper.querySelector<HTMLElement>('[data-share-column]')!.hidden = !showShares;
+
+    const fill = (section: HTMLTableSectionElement, rows: TableRow[]) => {
+      section.replaceChildren();
+      for (const row of rows) {
+        const tr = document.createElement('tr');
+        addCell(tr, 'th', row.label, 'row');
+        addCell(tr, 'td', row.monthly);
+        if (showShares) addCell(tr, 'td', row.share ?? '');
+        section.appendChild(tr);
+      }
+    };
+    fill(wrapper.querySelector('tbody')!, body);
+    fill(wrapper.querySelector('tfoot')!, footer);
+  }
+
+  let announceTimer: number | undefined;
+
+  // Said to screen readers only after typing pauses for a second, not on every keystroke.
+  function announceSoon(message: string) {
+    window.clearTimeout(announceTimer);
+    announceTimer = window.setTimeout(() => {
+      announcer.textContent = message;
+    }, 1000);
+  }
+
+  function update() {
+    const lines: BudgetLine[] = [];
+    const names = new Map<string, string>();
+    let hasProblem = false;
+
+    document.querySelectorAll<HTMLElement>('.line').forEach((row) => {
+      const id = row.dataset.line!;
+      const amountField = input(`${id}-amount`);
+      if (!isVisible(row)) {
+        setFieldError(amountField, '');
+        return;
+      }
+      const reading = readAmount(amountField.value);
+      setFieldError(amountField, reading.status === 'invalid' ? t.invalidAmount : '');
+      names.set(id, lineLabel(row));
+      if (reading.status === 'invalid') {
+        // Left out of the totals until it's fixed.
+        hasProblem = true;
+        return;
+      }
+      lines.push({
+        id,
+        kind: row.dataset.kind as 'in' | 'out',
+        amount: reading.value,
+        frequency: select(`${id}-frequency`).value as Frequency,
+      });
+    });
+
+    // Remove buttons name their row, such as "Remove pet care".
+    ownRows.filter(isVisible).forEach((row, index) => {
+      const name = ownCostName(row, index + 1);
+      row.querySelector('[data-remove]')!.setAttribute('aria-label', t.removeCostNamed(name));
+    });
+
+    const result = calculateBudget(lines);
+    const showShares = result.moneyIn > 0;
+    const rowsFor = (kind: 'in' | 'out'): TableRow[] =>
+      result.rows
+        .filter((row) => row.kind === kind)
+        .map((row) => ({
+          label: names.get(row.id)!,
+          monthly: dollars.format(row.monthly),
+          share: row.share === null ? null : shareText(row.share),
+        }));
+
+    const incomeRows = rowsFor('in');
+    const costRows = rowsFor('out');
+
+    const costsFooter: TableRow[] = [];
+    if (costRows.length > 0) {
+      costsFooter.push({
+        label: t.totalRow,
+        monthly: dollars.format(result.moneyOut),
+        share: result.outShare === null ? null : shareText(result.outShare),
+      });
+    }
+    // Shown with words and a sign, never color alone.
+    if (showShares && costRows.length > 0) {
+      costsFooter.push({
+        label: result.status === 'shortfall' ? t.leftRowShort : t.leftRow,
+        monthly: signedDollars.format(result.left),
+        share: shareText(result.left / result.moneyIn),
+      });
+    }
+
+    fillTable(
+      'income-table',
+      incomeRows,
+      incomeRows.length > 0 ? [{ label: t.totalRow, monthly: dollars.format(result.moneyIn), share: shareText(1) }] : [],
+      showShares,
+    );
+    fillTable('costs-table', costRows, costsFooter, showShares);
+
+    let message: string;
+    switch (result.status) {
+      case 'nothing':
+        message = t.emptyResults;
+        break;
+      case 'no-income':
+        message = t.summaryNoIncome(brief(result.moneyOut));
+        break;
+      case 'shortfall':
+        message = t.summaryShortfall(brief(result.shortfall), brief(result.moneyIn), brief(result.moneyOut));
+        break;
+      case 'even':
+        message = t.summaryEven(brief(result.moneyIn), brief(result.moneyOut));
+        break;
+      default:
+        message = t.summary(brief(result.moneyIn), brief(result.moneyOut), brief(result.left));
+    }
+
+    summary.textContent = message;
+    const showHelp = result.status === 'shortfall';
+    help.hidden = !showHelp;
+    problemNote.hidden = !hasProblem;
+    noIncomeNote.hidden = result.status !== 'no-income';
+
+    const spoken = [message, showHelp ? `${t.help.before}${t.help.linkText}${t.help.after}` : '', hasProblem ? t.problemFields : '']
+      .filter(Boolean)
+      .join(' ');
+    return spoken;
+  }
+
+  // The first hidden row is the next one to show.
+  function ownCount() {
+    return ownRows.filter(isVisible).length;
+  }
+
+  function refreshAddButton() {
+    const full = ownCount() >= MAX_OWN_COSTS;
+    addButton.disabled = full;
+    costLimit.hidden = !full;
+    if (full) addButton.setAttribute('aria-describedby', 'cost-limit');
+    else addButton.removeAttribute('aria-describedby');
+  }
+
+  function clearRow(row: HTMLElement) {
+    const id = row.dataset.line!;
+    input(`${id}-name`).value = '';
+    input(`${id}-amount`).value = '';
+    select(`${id}-frequency`).value = 'month';
+  }
+
+  addButton.addEventListener('click', () => {
+    const next = ownRows.find((row) => !isVisible(row));
+    if (!next) return;
+    next.hidden = false;
+    // Focus moves first, because a button that is disabled while focused loses focus.
+    input(`${next.dataset.line}-name`).focus();
+    refreshAddButton();
+    costStatus.textContent = t.costAdded;
+    announceSoon(update());
+  });
+
+  ownCosts.addEventListener('click', (event) => {
+    const button = (event.target as Element).closest('[data-remove]');
+    const row = button?.closest<HTMLElement>('[data-own]');
+    if (!row) return;
+
+    const visible = ownRows.filter(isVisible);
+    const position = visible.indexOf(row);
+    const removedName = capitalize(ownCostName(row, position + 1));
+
+    // Later rows move up one place, and the last row is emptied and hidden.
+    for (let i = position; i < visible.length - 1; i++) {
+      const from = visible[i + 1].dataset.line!;
+      const to = visible[i].dataset.line!;
+      input(`${to}-name`).value = input(`${from}-name`).value;
+      input(`${to}-amount`).value = input(`${from}-amount`).value;
+      select(`${to}-frequency`).value = select(`${from}-frequency`).value;
+    }
+    const last = visible[visible.length - 1];
+    clearRow(last);
+    last.hidden = true;
+
+    refreshAddButton();
+    addButton.focus();
+    costStatus.textContent = t.costRemoved(removedName);
+    announceSoon(update());
+  });
+
+  // The library's Input sets aria-describedby itself, so hints are added here.
+  document.querySelectorAll<HTMLElement>('[data-hint-for]').forEach((hint) => {
+    const id = hint.dataset.hintFor!;
+    input(id).setAttribute('aria-describedby', `${id}-validation ${hint.id}`);
+  });
+
+  // Counts that the calculator was used, once per page view. It sends no names or amounts.
+  const reportUsed = createUsedReporter('budget');
+
+  form.addEventListener('input', () => announceSoon(update()));
+  form.addEventListener('input', reportUsed);
+  form.addEventListener('submit', (event) => event.preventDefault());
+
+  ownCosts.hidden = false;
+  refreshAddButton();
+  update();
+</script>
+
+<style>
+  h3 {
+    font-size: 1.1rem;
+    margin: 1.5rem 0 0.5rem;
+  }
+
+  form > h3:first-child {
+    margin-top: 0;
+  }
+
+  .visually-hidden {
+    border: 0;
+    clip: rect(0 0 0 0);
+    height: 1px;
+    margin: -1px;
+    overflow: hidden;
+    padding: 0;
+    position: absolute;
+    white-space: nowrap;
+    width: 1px;
+  }
+
+  /* The rows are made by the page script, so scoped styles can't reach them directly.
+     Row names, including names people type, wrap instead of widening the table. */
+  .table-wrapper :global(tbody th),
+  .table-wrapper :global(tfoot th) {
+    white-space: normal;
+    overflow-wrap: anywhere;
+  }
+
+  .table-wrapper :global(tfoot th),
+  .table-wrapper :global(tfoot td) {
+    font-weight: 700;
+  }
+
+  .table-wrapper {
+    margin-bottom: 1.5rem;
+  }
+</style>

@@ -1,0 +1,109 @@
+---
+// One line of the budget form: an amount and how often, grouped in a fieldset
+// whose legend names the line. A line of the person's own also has a name field
+// and a Remove button, and starts hidden until "Add a cost" shows it.
+// The library has no Select, so "how often" is a plain select (see CLAUDE.md).
+import { Button, Input } from 'accessible-astro-components';
+import { DEFAULT_FREQUENCY, FREQUENCIES } from '../lib/budget';
+import { text } from '../text/en';
+
+interface Props {
+  id: string;
+  kind: 'in' | 'out';
+  legend: string;
+  hint?: string;
+  own?: boolean;
+  hidden?: boolean;
+}
+
+const { id, kind, legend, hint, own = false, hidden = false } = Astro.props;
+const t = text.budgetTool;
+---
+
+<div class="field line" data-line={id} data-kind={kind} data-own={own ? '' : undefined} hidden={hidden}>
+  <fieldset aria-describedby={hint ? `${id}-hint` : undefined}>
+    <legend>{legend}</legend>
+    {hint && <p id={`${id}-hint`} class="note">{hint}</p>}
+    {
+      own && (
+        <>
+          <Input id={`${id}-name`} name={`${id}-name`} label={t.ownCostNameLabel} maxlength="40" autocomplete="off" />
+          <p id={`${id}-name-hint`} class="note" data-hint-for={`${id}-name`}>
+            {t.ownCostNameHint}
+          </p>
+        </>
+      )
+    }
+    <div class="line-fields">
+      <Input id={`${id}-amount`} name={`${id}-amount`} label={t.amountLabel} inputmode="decimal" autocomplete="off" />
+      <div class="frequency">
+        <label for={`${id}-frequency`}>{t.frequencyLabel}</label>
+        <select id={`${id}-frequency`} name={`${id}-frequency`}>
+          {
+            FREQUENCIES.map((frequency) => (
+              <option value={frequency} selected={frequency === DEFAULT_FREQUENCY}>
+                {t.frequencies[frequency]}
+              </option>
+            ))
+          }
+        </select>
+      </div>
+    </div>
+    {
+      own && (
+        <div class="remove">
+          <Button htmlType="button" variant="outlined" size="sm" data-remove>
+            {t.removeCost}
+          </Button>
+        </div>
+      )
+    }
+  </fieldset>
+</div>
+
+<style>
+  fieldset {
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    margin: 0;
+    min-width: 0;
+    padding: 0.75rem 1rem 1rem;
+  }
+
+  legend {
+    padding: 0 0.25rem;
+  }
+
+  .line-fields {
+    display: grid;
+    gap: 0.75rem;
+  }
+
+  .frequency label {
+    display: block;
+    font-weight: 600;
+    margin-bottom: 0.25rem;
+  }
+
+  .remove {
+    margin-top: 0.75rem;
+  }
+
+  /* A line's name field sits above its amount, with room between them. */
+  .line > fieldset > :global(.input-group) {
+    margin-bottom: 0.25rem;
+  }
+
+  /* Let every field shrink to fit its box. Without this, a field sizes itself from its
+     own content and can stick out of the box on a narrow screen. */
+  .line-fields,
+  .line :global(.input-group) {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  @media (min-width: 36rem) {
+    .line-fields {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+</style>
