@@ -1,5 +1,6 @@
 ---
 import { Fieldset, Input, Radio } from 'accessible-astro-components';
+import Feedback from '../components/Feedback.astro';
 import Lesson from '../components/Lesson.astro';
 import Base from '../layouts/Base.astro';
 import { AUTO_RATES, AUTO_RATE_SOURCE } from '../data/auto-rates';
@@ -85,6 +86,8 @@ const loanLengths = [36, 48, 60, 72];
     </table>
   </div>
 
+  <Feedback tool="credit" />
+
   <h2>{t.aboutHeading}</h2>
   <p>{t.aboutRates(AUTO_RATE_SOURCE.period, AUTO_RATE_SOURCE.scoreModel)}</p>
   <p>{t.aboutFactors}</p>
@@ -96,6 +99,7 @@ const loanLengths = [36, 48, 60, 72];
 <script>
   import { AUTO_RATES } from '../data/auto-rates';
   import type { VehicleType } from '../data/auto-rates';
+  import { createUsedReporter } from '../lib/count';
   import { setFieldError } from '../lib/fields';
   import { monthlyPayment, parseUserNumber, totalInterest } from '../lib/loan';
   import { text } from '../text/en';
@@ -174,7 +178,11 @@ const loanLengths = [36, 48, 60, 72];
   // The library's Input sets aria-describedby itself, so the hint is added here.
   ownRateInputField.setAttribute('aria-describedby', 'own-rate-validation own-rate-hint');
 
+  // Counts that the calculator was used, once per page view. It sends no numbers.
+  const reportUsed = createUsedReporter('credit');
+
   form.addEventListener('input', update);
+  form.addEventListener('input', reportUsed);
   form.addEventListener('submit', (event) => event.preventDefault());
   update();
 </script>

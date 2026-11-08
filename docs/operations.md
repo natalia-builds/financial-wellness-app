@@ -11,6 +11,7 @@ How the project runs day to day. For what it is and why, see the [concept brief]
 | Open work and checks | [GitHub Issues](https://github.com/natalia-builds/financial-wellness-app/issues), with launch checks in [Issue #16](https://github.com/natalia-builds/financial-wellness-app/issues/16) |
 | Design System (private) | <https://claude.ai/artifact/1ptfPFQa6QSyvikzTUZLBe> |
 | Monthly rate check routine (private) | <https://claude.ai/code/routines/trig_01N3Z9JKpjoyj4QHCZ9MXGJn> |
+| Visit and answer counts (private login) | GoatCounter dashboard: <https://fin-wellness.goatcounter.com>. How counting works is under "Counting visits" below |
 | Rates and their sources | `src/data/` |
 | User-facing wording | `src/text/en.ts` |
 | Colors and the library connection | `src/layouts/Base.astro` and `src/styles/theme.css` |
@@ -41,6 +42,17 @@ It reads the Experian, Federal Reserve, and FDIC sources, compares them with `sr
 - Update the routine's instructions, including its sanity limits.
 
 **Keep the routine's access small.** It reads public web pages, so it should reach only this repository and its listed sources. Creating a routine attached the account's connected services automatically, including Google Drive and Granola. They were removed on purpose. Check that `mcp_connections` stays empty after any change to the routine.
+
+## Counting visits
+
+The site counts anonymous totals with [GoatCounter](https://www.goatcounter.com/) ([Issue #23](https://github.com/natalia-builds/financial-wellness-app/issues/23)). It sets no cookies, and nothing a person types is ever sent.
+
+- **What is counted:** page visits, and these events: `helpful/<tool>/yes|no`, `goal/<tool>/yes|not-yet`, and `used/<tool>`. `<tool>` is the tool's `key` in `src/lib/tools.ts`, so a new tool needs no new counting code. It does need `<Feedback tool="…" />` under its results, and `createUsedReporter('…')` in its page script.
+- **Where the code is:** `src/lib/count.ts` (event names and safe sending, with tests), `src/lib/analytics.ts` (the GoatCounter address and the live hostname), `src/components/Feedback.astro` (the two questions), and `public/goatcounter.js`.
+- **Live site only:** counting runs only on `financial-wellness-app.pages.dev`. Local and Cloudflare preview addresses load nothing and send nothing. If the site gets its own domain, add it in `src/lib/analytics.ts` and in GoatCounter's site settings.
+- **The script is a copy:** `public/goatcounter.js` is GoatCounter's `count.js` exactly as published in [its repository](https://github.com/arp242/goatcounter) at commit `478f026eb9deacb9378a46b96db72e11e9f20557` (April 7, 2026), under the ISC license shown in its first lines. Keep that header. To update it, replace the file with a newer commit's `public/count.js` and record the commit here. GoatCounter promises its `/count` address stays compatible, so an old copy keeps working.
+- **Skip your own visits:** open any page of the live site with `#toggle-goatcounter` added to the address. GoatCounter then ignores that browser. This is the one case where it saves anything in a browser, and only because you asked.
+- **Blocked is fine:** if an ad blocker stops counting, the questions still work and the thank-you still shows. Those answers just aren't counted.
 
 ## Design System
 
