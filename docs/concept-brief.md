@@ -54,7 +54,7 @@ Progress is framed as personal milestones rather than points or streaks, for exa
 ### Phase 1
 
 - Share of people who answer yes to "Was this helpful?" after a lesson or calculator
-- Anonymous usage counts, such as lessons finished and calculators used (totals only, with nothing tied to a person)
+- Anonymous usage counts (totals only, with nothing tied to a person). Page visits and calculator use are counted. Lessons finished aren't counted yet
 - Share of people who say, in an optional anonymous question, that they've moved on to a new goal
 
 ### Phase 2
@@ -66,9 +66,9 @@ Progress is framed as personal milestones rather than points or streaks, for exa
 ## Decisions
 
 - **Platform:** The pilot will be a mobile-friendly website. ([Issue #5](https://github.com/natalia-builds/financial-wellness-app/issues/5))
-- **User data:** Phase 1 will store no user data on a server, with no accounts. Anything saved stays in the person's own browser. Review before Phase 2. ([Issue #7](https://github.com/natalia-builds/financial-wellness-app/issues/7))
+- **User data:** Phase 1 will store no user data on a server, with no accounts. Anything saved stays in the person's own browser. The one thing counted is anonymous totals of visits, calculator use, and button answers, with no cookies and nothing a person types. See Measuring progress. Review before Phase 2. ([Issue #7](https://github.com/natalia-builds/financial-wellness-app/issues/7), [Issue #23](https://github.com/natalia-builds/financial-wellness-app/issues/23))
 - **Languages:** The project will support English only for the time being. Review before Phase 2. ([Issue #6](https://github.com/natalia-builds/financial-wellness-app/issues/6))
-- **Measuring progress:** Phase 1 will not track individuals. It will rely on anonymous totals and optional questions, including asking people directly whether they've moved on to a new goal.
+- **Measuring progress:** Phase 1 will not track individuals. It relies on anonymous totals and optional questions, including asking people directly whether they've moved on to a new goal. Totals of page visits, calculator use, and button answers ("Was this helpful?" and the goal question) are counted with [GoatCounter](https://www.goatcounter.com/). It sets no cookies, and the site serves its own copy of its script. Nothing a person types is ever sent, and answers are buttons, never typed text. Counting runs only on the live site. The trade-off is that a second company, besides Cloudflare, receives each visit. It uses a daily-changing hash, so it can't follow a person across days. Cloudflare Web Analytics can't count button answers, and a counter of our own would be more to build with no dashboard. Counting code is small and in one place, so switching tools later wouldn't need a rewrite. This choice doesn't decide the Phase 2 database. ([Issue #23](https://github.com/natalia-builds/financial-wellness-app/issues/23))
 - **Tier 3 boundary:** Tier 3 is education, not financial advice. It defines investment types and shares general best practices for planning for retirement, labeled as general guidance rather than personal advice. It never tells someone what to invest in, and never recommends specific investments, products, or companies. Calculators work with the person's own numbers, and the tool states clearly that it is educational. Have a qualified person review the wording before launch. This replaces the earlier education-only boundary, because people planning for retirement also need clear general guidance on how to start.
 - **Components:** New interactive components come from [Accessible Astro Components](https://github.com/incluud/accessible-astro-components), which is built for Astro, adds no dependencies, and focuses on accessibility. Existing plain HTML stays where it works. A library doesn't guarantee accessibility, so each component is still tested against WCAG 2.2 Level AA.
 - **Tools show, people choose:** The Tier 3 boundary also applies to Tier 2. Tools show what happens with the person's own numbers and don't pick an option for them, as the debt and savings tool does.
@@ -101,7 +101,8 @@ As of November 2026, Phase 1 has started and the [site is live](https://financia
 - **Built:** two tools, each with a short lesson, [how a credit score affects what you pay](https://financial-wellness-app.pages.dev/credit-score-and-interest/) and [paying down debt or building savings](https://financial-wellness-app.pages.dev/debt-or-emergency-fund/).
 - **Why these first:** conversations with many people about finance basics pointed to these two topics, so building started without a separate round of validation interviews.
 - **Also built:** a [tools page](https://financial-wellness-app.pages.dev/tools/) that groups the tools from simplest to most advanced.
-- **Not built yet:** the Phase 1 success measures ([Issue #23](https://github.com/natalia-builds/financial-wellness-app/issues/23)), the quiz, goal tools, and Tier 1.
+- **Also built:** the Phase 1 success measures ([Issue #23](https://github.com/natalia-builds/financial-wellness-app/issues/23)): anonymous page visit and calculator use totals, with "Was this helpful?" and an optional goal question under each tool's results.
+- **Not built yet:** the quiz, goal tools, and Tier 1.
 - **Before sharing widely:** the launch checks in [Issue #16](https://github.com/natalia-builds/financial-wellness-app/issues/16), including a qualified review of the wording.
 
 ## Phase 1 Roadmap

@@ -1,0 +1,138 @@
+---
+// The two anonymous questions under a tool's results. Pass the tool's `key`
+// from src/lib/tools.ts. Each answer is counted as a total, once per page view,
+// and the thank-you appears whether or not counting works (see src/lib/count.ts).
+import { Button } from 'accessible-astro-components';
+import type { ToolKey } from '../lib/count';
+import { text } from '../text/en';
+
+interface Props {
+  tool: ToolKey;
+}
+
+const { tool } = Astro.props;
+const t = text.feedback;
+
+const questions = [
+  {
+    id: 'helpful',
+    question: t.helpful.question,
+    answers: [
+      { value: 'yes', label: t.helpful.yes },
+      { value: 'no', label: t.helpful.no },
+    ],
+  },
+  {
+    id: 'goal',
+    question: t.goal.question,
+    hint: t.goal.hint,
+    answers: [
+      { value: 'yes', label: t.goal.yes },
+      { value: 'not-yet', label: t.goal.notYet },
+    ],
+  },
+];
+---
+
+{/* Hidden until the script runs: without JavaScript the buttons would do nothing. */}
+<section class="feedback" data-tool={tool} hidden>
+  <h2>{t.heading}</h2>
+  {
+    questions.map((question) => (
+      <fieldset
+        class="question"
+        data-question={question.id}
+        data-thanks={t.thanks}
+        aria-describedby={question.hint ? `${question.id}-hint` : undefined}
+      >
+        <legend>{question.question}</legend>
+        {question.hint && (
+          <p id={`${question.id}-hint`} class="note">
+            {question.hint}
+          </p>
+        )}
+        <div class="answers">
+          {question.answers.map((answer) => (
+            <Button htmlType="button" variant="outlined" data-answer={answer.value}>
+              {answer.label}
+            </Button>
+          ))}
+        </div>
+        {/* The status area is on the page from the start, so screen readers announce the thank-you when it appears. */}
+        <div role="status">
+          <p class="thanks" tabindex="-1" hidden />
+        </div>
+      </fieldset>
+    ))
+  }
+  <p class="note">{t.note}</p>
+</section>
+
+<script>
+  import { feedbackEvent, QUESTIONS, sendEvent } from '../lib/count';
+  import type { Question, ToolKey } from '../lib/count';
+
+  document.querySelectorAll<HTMLElement>('.feedback').forEach((section) => {
+    const tool = section.dataset.tool as ToolKey;
+    section.hidden = false;
+
+    section.querySelectorAll<HTMLElement>('.question').forEach((question) => {
+      const id = question.dataset.question as Question;
+      const answers = question.querySelector<HTMLElement>('.answers')!;
+      const thanks = question.querySelector<HTMLElement>('.thanks')!;
+
+      answers.addEventListener('click', (event) => {
+        const button = (event.target as Element).closest<HTMLButtonElement>('button[data-answer]');
+        const answer = button?.dataset.answer;
+        // Ignore anything that isn't one of this question's own buttons.
+        if (!answer || answers.hidden || !(QUESTIONS[id] as readonly string[]).includes(answer)) return;
+
+        // If counting is blocked this does nothing, and the thank-you still shows.
+        sendEvent(feedbackEvent(id, tool, answer as never));
+
+        // Replace the buttons, and move focus so keyboard and screen reader users keep their place.
+        answers.hidden = true;
+        thanks.textContent = question.dataset.thanks!;
+        thanks.hidden = false;
+        thanks.focus();
+      });
+    });
+  });
+</script>
+
+<style>
+  .feedback {
+    margin-top: 2rem;
+  }
+
+  .feedback h2 {
+    margin-top: 0;
+  }
+
+  .question {
+    border: 0;
+    margin: 0 0 1.25rem;
+    min-width: 0;
+    padding: 0;
+  }
+
+  .question legend {
+    font-weight: 600;
+    padding: 0;
+  }
+
+  .question .note {
+    margin: 0.25rem 0 0;
+  }
+
+  .answers {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    margin-top: 0.5rem;
+  }
+
+  .thanks {
+    margin: 0.5rem 0 0;
+  }
+</style>

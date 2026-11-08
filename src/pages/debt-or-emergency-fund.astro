@@ -1,5 +1,6 @@
 ---
 import { Input } from 'accessible-astro-components';
+import Feedback from '../components/Feedback.astro';
 import Lesson from '../components/Lesson.astro';
 import Base from '../layouts/Base.astro';
 import { CREDIT_CARD_RATE, SAVINGS_RATE } from '../data/reference-rates';
@@ -76,6 +77,8 @@ const sources = [CREDIT_CARD_RATE, SAVINGS_RATE];
     </table>
   </div>
 
+  <Feedback tool="debt" />
+
   <h2>{t.aboutHeading}</h2>
   <p>{t.aboutTable}</p>
   <p>{t.aboutLimits}</p>
@@ -96,6 +99,7 @@ const sources = [CREDIT_CARD_RATE, SAVINGS_RATE];
 <script>
   import { comparePlans, MAX_MONTHS, paymentCoversInterest, SURPRISE_MONTH } from '../lib/debt-vs-savings';
   import type { PlanResult } from '../lib/debt-vs-savings';
+  import { createUsedReporter } from '../lib/count';
   import { setFieldError } from '../lib/fields';
   import { parseUserNumber } from '../lib/loan';
   import { text } from '../text/en';
@@ -233,7 +237,11 @@ const sources = [CREDIT_CARD_RATE, SAVINGS_RATE];
     field(id).setAttribute('aria-describedby', `${id}-validation ${hint.id}`);
   });
 
+  // Counts that the calculator was used, once per page view. It sends no numbers.
+  const reportUsed = createUsedReporter('debt');
+
   form.addEventListener('input', update);
+  form.addEventListener('input', reportUsed);
   form.addEventListener('submit', (event) => event.preventDefault());
   update();
 </script>

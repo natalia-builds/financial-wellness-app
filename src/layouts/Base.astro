@@ -44,6 +44,13 @@ const { title, description, crumbs } = Astro.props;
   </body>
 </html>
 
+{/* Loads anonymous counting on the live site only. See src/lib/count.ts. */}
+<script>
+  import { startCounting } from '../lib/count';
+
+  startCounting();
+</script>
+
 <style is:global>
   :root {
     color-scheme: light dark;

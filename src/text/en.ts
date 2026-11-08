@@ -19,6 +19,23 @@ export const text = {
     toolsHeading: 'Tools',
     allToolsLink: 'See all tools',
   },
+  // The two questions under each tool's results. Answers are counted as totals (see src/lib/count.ts).
+  feedback: {
+    heading: 'Tell us how it went',
+    helpful: {
+      question: 'Was this helpful?',
+      yes: 'Yes',
+      no: 'No',
+    },
+    goal: {
+      question: 'Have you moved on to a new money goal since you started using this site?',
+      hint: 'This question is optional. You can skip it.',
+      yes: 'Yes',
+      notYet: 'Not yet',
+    },
+    thanks: 'Thank you for letting us know.',
+    note: 'Answers are counted as totals. There are no cookies, and the numbers you typed are never sent.',
+  },
   // Card wording for each tool in src/lib/tools.ts, found by the tool's key.
   toolList: {
     credit: {
