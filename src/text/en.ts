@@ -9,6 +9,7 @@ export const text = {
     breadcrumbLabel: 'Breadcrumb',
     skipLink: 'Skip to main content',
     footer: 'Free and open source. This site is for education only and is not financial advice.',
+    counting: 'Visits are counted as totals, with no cookies. Nothing you type into a tool is sent.',
     sourceCode: 'See the source code',
   },
   home: {
