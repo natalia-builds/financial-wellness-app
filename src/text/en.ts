@@ -173,7 +173,7 @@ export const text = {
     },
     // The line names are also used in the table, so each one is short.
     lines: {
-      pay: { name: 'Pay from work' },
+      pay: { name: 'Pay from work', hint: 'What you take home after taxes and other deductions.' },
       'other-income': {
         name: 'Other money coming in',
         hint: 'For example, benefits, child support, or side work.',
