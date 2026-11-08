@@ -12,6 +12,11 @@ html:root {
 
   --color-error-border: var(--error-border);
 
+  /* Notification type="warning". Amber, so red stays reserved for errors. */
+  --color-warning-text: var(--warning-text);
+  --color-warning-bg: var(--warning-bg);
+  --color-warning-border: var(--warning-border);
+
   --radius-s: 6px;
   --radius-m: 8px;
 }

@@ -1,5 +1,5 @@
 ---
-import { Button, Checkbox } from 'accessible-astro-components';
+import { Button, Checkbox, Notification } from 'accessible-astro-components';
 import BudgetLine from '../components/BudgetLine.astro';
 import Feedback from '../components/Feedback.astro';
 import Lesson from '../components/Lesson.astro';
@@ -25,7 +25,21 @@ const hintFor = (id: string) => (t.lines as Record<string, { hint?: string }>)[i
       Hidden until the script runs, because without JavaScript it would do nothing. */}
   <div id="save-choice" class="save-choice" hidden>
     <Checkbox id="save-box" name="save-box" label={t.save.label} aria-describedby="save-warning" />
-    <p id="save-warning" class="note">{t.save.warning}</p>
+    {/* The library draws its warning icon only in the accent variant, which adds a side stripe and a corner badge.
+        This uses the plain box and the same icon, so the warning has words, an icon, and a border, not color alone. */}
+    <Notification type="warning" class="save-warning">
+      <svg width="1.5em" height="1.5em" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+        <path
+          fill="none"
+          stroke="currentColor"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="2"
+          d="m21.73 18l-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3M12 9v4m0 4h.01"
+        ></path>
+      </svg>
+      <p id="save-warning"><strong>{t.save.warning}</strong></p>
+    </Notification>
     <p id="save-restored" class="note" hidden>{t.save.restored}</p>
     <p id="save-unavailable" class="note" hidden>{t.save.unavailable}</p>
     {/* On the page from the start so screen readers pick up the change. */}
@@ -485,6 +499,18 @@ const hintFor = (id: string) => (t.lines as Record<string, { hint?: string }>)[i
 
   .save-choice p {
     margin: 0.25rem 0 0;
+  }
+
+  .save-choice :global(.save-warning) {
+    margin: 0.5rem 0;
+  }
+
+  .save-choice :global(.save-warning svg) {
+    flex-shrink: 0;
+  }
+
+  #save-warning {
+    margin: 0;
   }
 
   /* The library's box is 1em. This makes it the 24px minimum click target. */
