@@ -112,3 +112,19 @@ Node.js and the GitHub CLI are installed in `~/.local`, and `~/.local/bin` is on
 - Keep one conversation to one task.
 - Start by pointing at what's relevant, such as the brief and an Issue.
 - Before ending, ask whether everything important is written down.
+
+## Planning, building, and reviewing
+
+Work is split between models to save cost: a more capable model (Opus) plans and reviews, and a faster one (Sonnet) builds.
+
+1. **Plan (Opus):** talk the idea through, settle the decisions, and write each piece as a GitHub Issue marked "Ready to build," with its goal, the files to change, "Done when," and "Out of scope." Record the decisions and why in a comment on the Issue. Work that isn't settled yet is an Issue marked "Needs a detailed plan."
+2. **Build (Sonnet):** open a new chat, choose Sonnet in the model picker, and paste the prompt below with the Issue's number. One Issue per chat.
+3. **Review (Opus):** bring the pull request back to a planning session. The review checks the code against the Issue, runs the tests and build, tries the change in a browser (awkward inputs, 375px, dark mode, the keyboard), and runs the [accessibility checks](accessibility-checks.md). Small fixes are made on the pull request's branch. Then merge, and confirm on the live site.
+
+Build Issues that change the same files one at a time, merging each before starting the next, so they don't conflict.
+
+The prompt for a build chat:
+
+```
+Implement Issue #NN in natalia-builds/financial-wellness-app. Read the Issue and its comments, `CLAUDE.md`, and `docs/concept-brief.md` first. Work on a new branch, follow the Workflow section, run `npm test` and `npm run build`, check the change in the browser at 375px and in dark mode, and open a pull request that lists what was and wasn't tested. Explain each step in plain language as you go. If anything in the Issue is unclear or conflicts with the brief, stop and ask instead of guessing.
+```
