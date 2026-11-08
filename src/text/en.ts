@@ -56,7 +56,8 @@ export const text = {
     title: 'Tools',
     description: 'All of the free tools, listed from the basics to planning ahead.',
     crumb: 'Tools',
-    intro: 'Each tool lets you try your own numbers. Nothing you type is saved or sent anywhere.',
+    intro:
+      'Each tool lets you try your own numbers. Nothing you type is sent anywhere. Some tools let you choose to keep your numbers on your own device.',
     groups: {
       'getting-started': {
         name: 'Getting started',
@@ -155,7 +156,20 @@ export const text = {
         'Pay that comes every week or every two weeks does not line up neatly with bills that come once a month. Some months have an extra payday, and some bills come only once a year. This tool turns everything into a monthly amount, so you don\'t have to do that math yourself.',
       ],
     },
-    privacy: 'Your numbers stay on your device. Nothing you type here is saved or sent anywhere.',
+    privacy:
+      'Your numbers stay on your device. They are never sent anywhere, and they are only kept if you tick the box below.',
+    save: {
+      label: 'Remember my numbers on this device',
+      warning: 'Don\'t use this on a shared or public computer.',
+      restored: 'These are the numbers you saved on this device. Untick the box to erase them.',
+      saved: 'Saved on this device',
+      erased: 'Saved numbers erased',
+      saveFailed: 'Your numbers could not be saved, so remembering has been turned off. The tool still works.',
+      eraseFailed:
+        'Your saved numbers could not be erased. You can clear this site\'s data in your browser settings.',
+      unavailable:
+        'Your browser is not letting this site keep anything, so remembering numbers is not available. The tool works the same without it.',
+    },
     startsEmpty: 'The tool starts empty, because only you know your numbers. Leave a line blank if it does not apply to you.',
     formHeading: 'Try your numbers',
     incomeHeading: 'Money coming in',

@@ -1,5 +1,5 @@
 ---
-import { Button } from 'accessible-astro-components';
+import { Button, Checkbox, Notification } from 'accessible-astro-components';
 import BudgetLine from '../components/BudgetLine.astro';
 import Feedback from '../components/Feedback.astro';
 import Lesson from '../components/Lesson.astro';
@@ -20,6 +20,31 @@ const hintFor = (id: string) => (t.lines as Record<string, { hint?: string }>)[i
   <h2>{t.formHeading}</h2>
   <p class="note">{t.privacy}</p>
   <p class="note">{t.startsEmpty}</p>
+
+  {/* Outside the form on purpose: ticking it must not count as using the calculator.
+      Hidden until the script runs, because without JavaScript it would do nothing. */}
+  <div id="save-choice" class="save-choice" hidden>
+    <Checkbox id="save-box" name="save-box" label={t.save.label} aria-describedby="save-warning" />
+    {/* The library draws its warning icon only in the accent variant, which adds a side stripe and a corner badge.
+        This uses the plain box and the same icon, so the warning has words, an icon, and a border, not color alone. */}
+    <Notification type="warning" class="save-warning">
+      <svg width="1.5em" height="1.5em" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+        <path
+          fill="none"
+          stroke="currentColor"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="2"
+          d="m21.73 18l-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3M12 9v4m0 4h.01"
+        ></path>
+      </svg>
+      <p id="save-warning"><strong>{t.save.warning}</strong></p>
+    </Notification>
+    <p id="save-restored" class="note" hidden>{t.save.restored}</p>
+    <p id="save-unavailable" class="note" hidden>{t.save.unavailable}</p>
+    {/* On the page from the start so screen readers pick up the change. */}
+    <p id="save-status" class="note" role="status"></p>
+  </div>
 
   <form id="budget-form" novalidate>
     <h3>{t.incomeHeading}</h3>
@@ -96,6 +121,8 @@ const hintFor = (id: string) => (t.lines as Record<string, { hint?: string }>)[i
 <script>
   import { calculateBudget, COST_LINES, INCOME_LINES, MAX_OWN_COSTS, readAmount } from '../lib/budget';
   import type { BudgetLine, Frequency } from '../lib/budget';
+  import { eraseBudget, FIXED_LINES, isStorageAvailable, loadBudget, saveBudget } from '../lib/budget-storage';
+  import type { SavedBudget } from '../lib/budget-storage';
   import { createUsedReporter } from '../lib/count';
   import { setFieldError } from '../lib/fields';
   import { text } from '../text/en';
@@ -325,6 +352,7 @@ const hintFor = (id: string) => (t.lines as Record<string, { hint?: string }>)[i
     refreshAddButton();
     costStatus.textContent = t.costAdded;
     announceSoon(update());
+    persist();
   });
 
   ownCosts.addEventListener('click', (event) => {
@@ -352,6 +380,7 @@ const hintFor = (id: string) => (t.lines as Record<string, { hint?: string }>)[i
     addButton.focus();
     costStatus.textContent = t.costRemoved(removedName);
     announceSoon(update());
+    persist();
   });
 
   // The library's Input sets aria-describedby itself, so hints are added here.
@@ -363,9 +392,95 @@ const hintFor = (id: string) => (t.lines as Record<string, { hint?: string }>)[i
   // Counts that the calculator was used, once per page view. It sends no names or amounts.
   const reportUsed = createUsedReporter('budget');
 
+  // Keeping numbers on this device is opt-in. Nothing is written unless the box is
+  // ticked, and none of this is counted or sent anywhere.
+  const saveChoice = document.querySelector<HTMLElement>('#save-choice')!;
+  const saveBox = document.querySelector<HTMLInputElement>('#save-box')!;
+  const saveRestored = document.querySelector<HTMLElement>('#save-restored')!;
+  const saveUnavailable = document.querySelector<HTMLElement>('#save-unavailable')!;
+  const saveStatus = document.querySelector<HTMLElement>('#save-status')!;
+
+  // Every field exactly as typed, in the shape the storage file keeps.
+  function collect(): Omit<SavedBudget, 'version'> {
+    const lines: SavedBudget['lines'] = {};
+    for (const id of FIXED_LINES) {
+      lines[id] = { amount: input(`${id}-amount`).value, frequency: select(`${id}-frequency`).value as Frequency };
+    }
+    const own = ownRows.filter(isVisible).map((row) => {
+      const id = row.dataset.line!;
+      return {
+        name: input(`${id}-name`).value,
+        amount: input(`${id}-amount`).value,
+        frequency: select(`${id}-frequency`).value as Frequency,
+      };
+    });
+    return { lines, ownCosts: own };
+  }
+
+  // Fills the form from saved numbers. It sets values directly and fires no input
+  // events, so coming back to saved numbers isn't counted as using the calculator.
+  function restore(saved: SavedBudget) {
+    for (const id of FIXED_LINES) {
+      input(`${id}-amount`).value = saved.lines[id].amount;
+      select(`${id}-frequency`).value = saved.lines[id].frequency;
+    }
+    saved.ownCosts.forEach((cost, index) => {
+      const row = ownRows[index];
+      const id = row.dataset.line!;
+      row.hidden = false;
+      input(`${id}-name`).value = cost.name;
+      input(`${id}-amount`).value = cost.amount;
+      select(`${id}-frequency`).value = cost.frequency;
+    });
+  }
+
+  // Saves while the box is ticked. If the browser stops allowing it, the box is
+  // turned off and the person is told, so it never looks saved when it isn't.
+  function persist() {
+    if (!saveBox.checked) return;
+    if (saveBudget(collect())) return;
+    // An older copy may still be there, and it must not come back as if it were chosen.
+    eraseBudget();
+    saveBox.checked = false;
+    saveBox.disabled = true;
+    saveRestored.hidden = true;
+    saveStatus.textContent = t.save.saveFailed;
+  }
+
+  saveBox.addEventListener('change', () => {
+    if (saveBox.checked) {
+      if (saveBudget(collect())) saveStatus.textContent = t.save.saved;
+      else persist();
+      return;
+    }
+    saveRestored.hidden = true;
+    if (eraseBudget()) {
+      saveStatus.textContent = t.save.erased;
+    } else {
+      // Still saved, so the box stays ticked rather than claiming it is erased.
+      saveBox.checked = true;
+      saveStatus.textContent = t.save.eraseFailed;
+    }
+  });
+
   form.addEventListener('input', () => announceSoon(update()));
   form.addEventListener('input', reportUsed);
+  form.addEventListener('input', persist);
   form.addEventListener('submit', (event) => event.preventDefault());
+
+  saveChoice.hidden = false;
+  if (!isStorageAvailable()) {
+    saveBox.disabled = true;
+    saveUnavailable.hidden = false;
+    saveBox.setAttribute('aria-describedby', 'save-warning save-unavailable');
+  } else {
+    const saved = loadBudget();
+    if (saved) {
+      restore(saved);
+      saveBox.checked = true;
+      saveRestored.hidden = false;
+    }
+  }
 
   ownCosts.hidden = false;
   refreshAddButton();
@@ -376,6 +491,33 @@ const hintFor = (id: string) => (t.lines as Record<string, { hint?: string }>)[i
   h3 {
     font-size: 1.1rem;
     margin: 1.5rem 0 0.5rem;
+  }
+
+  .save-choice {
+    margin: 0 0 1.5rem;
+  }
+
+  .save-choice p {
+    margin: 0.25rem 0 0;
+  }
+
+  .save-choice :global(.save-warning) {
+    margin: 0.5rem 0;
+  }
+
+  .save-choice :global(.save-warning svg) {
+    flex-shrink: 0;
+  }
+
+  #save-warning {
+    margin: 0;
+  }
+
+  /* The library's box is 1em. This makes it the 24px minimum click target. */
+  .save-choice :global(input[type='checkbox']) {
+    accent-color: var(--accent);
+    block-size: 1.5rem;
+    inline-size: 1.5rem;
   }
 
   form > h3:first-child {
