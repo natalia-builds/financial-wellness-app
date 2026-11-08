@@ -152,7 +152,7 @@ export const text = {
       paragraphs: [
         'A budget is a plan for your money, not a judgment of it. It is a way to see where your money goes, so that you can decide what to do with it. Seeing the picture does not mean you did something wrong, and many costs are not up to you.',
         'Some costs stay the same every month, such as rent. Others change, such as groceries, power in winter, or a car repair. Costs that change are easier to plan for once you have looked at a few months and picked a typical amount.',
-        'Pay that comes every week or every two weeks does not line up neatly with bills that come once a month. Some months have an extra payday, and some bills come only once a year. This tool turns everything into a monthly amount, so you do not have to do that arithmetic yourself.',
+        'Pay that comes every week or every two weeks does not line up neatly with bills that come once a month. Some months have an extra payday, and some bills come only once a year. This tool turns everything into a monthly amount, so you don\'t have to do that math yourself.',
       ],
     },
     privacy: 'Your numbers stay on your device. Nothing you type here is saved or sent anywhere.',
