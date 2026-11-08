@@ -74,6 +74,12 @@ describe('summarize', () => {
     ]);
   });
 
+  it('matches pages whether or not GoatCounter keeps the trailing slash', () => {
+    const withoutSlash = summarize([{ path: '/debt-or-emergency-fund', event: false, count: 2 }], tools);
+    expect(withoutSlash.usage[1].pageVisitors).toBe(2);
+    expect(summarize([{ path: '/', event: false, count: 3 }], tools).usage[1].pageVisitors).toBe(0);
+  });
+
   it('adds up page visits by day, leaving out answers', () => {
     expect(result.daily).toEqual([
       { day: '2026-11-08', visitors: 11 },

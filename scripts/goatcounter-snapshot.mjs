@@ -54,7 +54,9 @@ export function hourRange(startDay, now = new Date()) {
 export function summarize(hits, tools) {
   const pageRows = hits.filter((h) => !h.event);
   const eventRows = hits.filter((h) => h.event);
-  const visitorsOn = (path) => pageRows.find((h) => h.path === path)?.count ?? 0;
+  // GoatCounter drops the trailing slash ("/tools"), while the site's links keep it ("/tools/").
+  const samePage = (a, b) => a.replace(/(.)\/$/, '$1') === b.replace(/(.)\/$/, '$1');
+  const visitorsOn = (path) => pageRows.find((h) => samePage(h.path, path))?.count ?? 0;
   const eventCount = (path) => eventRows.find((h) => h.path === path)?.count ?? 0;
 
   const pages = pageRows
@@ -95,10 +97,12 @@ async function fetchAllHits(base, token, range) {
   for (let page = 0; page < 20; page++) {
     const params = new URLSearchParams({ start: range.start, end: range.end, limit: '100', group: 'day' });
     if (hits.length) params.set('exclude_paths', hits.map((h) => h.path_id).join(','));
-    const response = await fetch(`${base}/stats/hits?${params}`, { headers: { Authorization: `Bearer ${token}` } });
+    const url = `${base}/stats/hits?${params}`;
+    const response = await fetch(url, { headers: { Authorization: `Bearer ${token}` } });
     if (response.status === 401) throw new Error('GoatCounter refused the API key. Check GOATCOUNTER_API_TOKEN in .env.');
     if (response.status === 403) throw new Error('The API key needs the "Read statistics" permission.');
-    if (!response.ok) throw new Error(`GoatCounter answered ${response.status}: ${(await response.text()).slice(0, 200)}`);
+    // The address holds no key, so it's safe to show.
+    if (!response.ok) throw new Error(`GoatCounter answered ${response.status} for ${url}`);
     const body = await response.json();
     hits.push(...(body.hits ?? []));
     if (!body.more) return hits;
