@@ -12,6 +12,7 @@ How the project runs day to day. For what it is and why, see the [concept brief]
 | Design System (private) | <https://claude.ai/artifact/1ptfPFQa6QSyvikzTUZLBe> |
 | Monthly rate check routine (private) | <https://claude.ai/code/routines/trig_01N3Z9JKpjoyj4QHCZ9MXGJn> |
 | Visit and answer counts (private login) | GoatCounter dashboard: <https://fin-wellness.goatcounter.com>. How counting works is under "Counting visits" below |
+| Visits dashboard (private) | <https://claude.ai/artifact/GqEUQG8VuTJEmasNdgaFop>, a snapshot refreshed on request. See "The visits dashboard" below |
 | Rates and their sources | `src/data/` |
 | User-facing wording | `src/text/en.ts` |
 | Colors and the library connection | `src/layouts/Base.astro` and `src/styles/theme.css` |
@@ -53,6 +54,14 @@ The site counts anonymous totals with [GoatCounter](https://www.goatcounter.com/
 - **The script is a copy:** `public/goatcounter.js` is GoatCounter's `count.js` exactly as published in [its repository](https://github.com/arp242/goatcounter) at commit `478f026eb9deacb9378a46b96db72e11e9f20557` (April 7, 2026), under the ISC license shown in its first lines. Keep that header. To update it, replace the file with a newer commit's `public/count.js` and record the commit here. GoatCounter promises its `/count` address stays compatible, so an old copy keeps working.
 - **Skip your own visits:** open any page of the live site with `#toggle-goatcounter` added to the address. GoatCounter then ignores that browser. This is the one case where it saves anything in a browser, and only because you asked.
 - **Blocked is fine:** if an ad blocker stops counting, the questions still work and the thank-you still shows. Those answers just aren't counted.
+
+### The visits dashboard
+
+A friendlier view of the same totals, as a private Claude artifact (linked above). It's a snapshot, not live: it shows the numbers as of its last refresh, with the date.
+
+- **The key:** in GoatCounter, open your username, then API, and create a key with only the "Read statistics" permission. Save it in `.env` as `GOATCOUNTER_API_TOKEN=...`. Git ignores `.env`, so the key never reaches this public repository. Never put it in the dashboard or paste it into a chat.
+- **Refreshing:** ask Claude to update the visits dashboard. It runs `node scripts/goatcounter-snapshot.mjs`, which reads the key from `.env`, asks GoatCounter for the totals since counting started, and prints them as one file of anonymous totals. Claude then uploads that file to the dashboard. The script reads the GoatCounter address from `src/lib/analytics.ts` and the tools from `src/lib/tools.ts`, so a new tool needs no change to it.
+- **Reading the numbers:** GoatCounter counts visitors, not clicks or visits. Someone who answers "Yes" and then "No" counts once for each. With only a few answers, percentages can look better than they are, so the dashboard shows counts beside them.
 
 ## Design System
 
