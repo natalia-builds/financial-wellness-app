@@ -1,5 +1,9 @@
 // All user-facing wording lives here so it can be reviewed, and later
 // translated, without touching the code.
+//
+// Wording is written inside single quotes, so an apostrophe needs a backslash
+// before it: 'you don\'t'. Without one, the text ends early and the site
+// won't build. Visitors never see the backslash.
 
 export const text = {
   site: {
