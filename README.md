@@ -43,6 +43,8 @@ Nothing is locked behind another stage. As people stabilize, the site invites th
 
 ## Roadmap
 
+Live progress for each stage is on the [milestones page](https://github.com/natalia-builds/financial-wellness-app/milestones).
+
 1. **Launch checks:** screen reader testing, a full accessibility review, real-device testing, and a qualified review of the wording ([#16](https://github.com/natalia-builds/financial-wellness-app/issues/16)). Then share with a small group and gather feedback.
 2. **Savings goal tool** with a lesson ([#35](https://github.com/natalia-builds/financial-wellness-app/issues/35)).
 3. **Quiz and a two-part home page** that suggest tools without steering ([#36](https://github.com/natalia-builds/financial-wellness-app/issues/36)).
