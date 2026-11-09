@@ -94,6 +94,12 @@ const t = text.budgetTool;
     margin-bottom: 0.25rem;
   }
 
+  /* The name hint gets the same space below it as other notes on the page (1em, about 15px),
+     so it reads as part of the name field above it and not the Amount label below. */
+  .line > fieldset > .note[data-hint-for] {
+    margin-bottom: 1em;
+  }
+
   /* Let every field shrink to fit its box. Without this, a field sizes itself from its
      own content and can stick out of the box on a narrow screen. */
   .line-fields,

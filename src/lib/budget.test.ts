@@ -7,6 +7,7 @@ import {
   FREQUENCIES,
   INCOME_LINES,
   readAmount,
+  shouldShowHelp,
   toMonthly,
 } from './budget';
 import type { BudgetLine, Frequency } from './budget';
@@ -226,5 +227,29 @@ describe('calculateBudget', () => {
         expect(Number.isNaN(value)).toBe(false);
       }
     }
+  });
+});
+
+describe('shouldShowHelp', () => {
+  it('shows the 2-1-1 line for a shortfall and for costs with no income', () => {
+    expect(shouldShowHelp('shortfall')).toBe(true);
+    expect(shouldShowHelp('no-income')).toBe(true);
+  });
+
+  it('stays hidden when nothing is typed, or when the month is even or has money left', () => {
+    expect(shouldShowHelp('nothing')).toBe(false);
+    expect(shouldShowHelp('even')).toBe(false);
+    expect(shouldShowHelp('surplus')).toBe(false);
+  });
+
+  it('follows real budgets: costs and no income show it, an empty or covered budget does not', () => {
+    const show = (lines: BudgetLine[]) => shouldShowHelp(calculateBudget(lines).status);
+    expect(show([line('housing', 'out', 900)])).toBe(true);
+    expect(show([line('pay', 'in', 0), line('housing', 'out', 900)])).toBe(true);
+    expect(show([line('pay', 'in', 1000), line('housing', 'out', 1200)])).toBe(true);
+    expect(show([])).toBe(false);
+    expect(show([line('pay', 'in', 0), line('housing', 'out', 0)])).toBe(false);
+    expect(show([line('pay', 'in', 2000), line('housing', 'out', 900)])).toBe(false);
+    expect(show([line('pay', 'in', 1500)])).toBe(false);
   });
 });

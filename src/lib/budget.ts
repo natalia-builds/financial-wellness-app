@@ -93,6 +93,14 @@ export interface BudgetRow {
 // (like 0.1 + 0.2 - 0.3) can't turn "even" into a surplus or a shortfall.
 export type BudgetStatus = 'nothing' | 'no-income' | 'shortfall' | 'even' | 'surplus';
 
+// Whether to show the 2-1-1 help line. It shows when more is going out than coming
+// in, and also when there are costs but no income at all, since someone with bills
+// and nothing coming in is exactly who the line is for. It stays hidden when
+// nothing has been typed.
+export function shouldShowHelp(status: BudgetStatus): boolean {
+  return status === 'shortfall' || status === 'no-income';
+}
+
 export interface BudgetResult {
   moneyIn: number;
   moneyOut: number;
