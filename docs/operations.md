@@ -122,7 +122,7 @@ Node.js and the GitHub CLI are installed in `~/.local`, and `~/.local/bin` is on
 
 - Open the session in the `financial-wellness-app` folder, so `CLAUDE.md` loads automatically.
 - Keep one conversation to one task.
-- Start by pointing at what's relevant, such as the brief and an Issue. To decide what's next, look at the earliest open [milestone](https://github.com/natalia-builds/financial-wellness-app/milestones).
+- Type `/next` to start. It reads the brief and this doc, checks the milestones, open pull requests, and Issue #16, then recommends what to work on and waits for a go-ahead. The steps are in `.claude/skills/next/SKILL.md`. For a specific task, point at what's relevant instead, such as the brief and an Issue.
 - Before ending, ask whether everything important is written down.
 
 ## Planning, building, and reviewing
