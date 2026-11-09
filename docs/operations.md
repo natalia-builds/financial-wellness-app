@@ -111,7 +111,7 @@ Node.js and the GitHub CLI are installed in `~/.local`, and `~/.local/bin` is on
 
 - Open the session in the `financial-wellness-app` folder, so `CLAUDE.md` loads automatically.
 - Keep one conversation to one task.
-- Start by pointing at what's relevant, such as the brief and an Issue.
+- Start by pointing at what's relevant, such as the brief and an Issue. To decide what's next, look at the earliest open [milestone](https://github.com/natalia-builds/financial-wellness-app/milestones).
 - Before ending, ask whether everything important is written down.
 
 ## Planning, building, and reviewing

@@ -42,7 +42,7 @@ Anything that matters must end up in the repository or on GitHub, because new se
 
 - Keep this file short. Link to details instead of copying them.
 - Update the brief in the same pull request as a change that alters a decision. Record why in the Issue or pull request.
-- Keep open work in GitHub Issues.
+- Keep open work in GitHub Issues, assigned to a milestone for its roadmap stage and labeled "ready to build" or "needs a detailed plan" when it is build work. What comes next is the earliest open milestone. See [Operations](docs/operations.md).
 - Give each fact one home, and mark replaced decisions as replaced.
 
 ## Explaining the work
