@@ -73,11 +73,13 @@ const hintFor = (id: string) => (t.lines as Record<string, { hint?: string }>)[i
   {/* Visible at once. The live region below repeats it, but only after typing pauses. */}
   <p id="summary">{t.emptyResults}</p>
   <div id="announcer" class="visually-hidden" role="status"></div>
+  {/* With no income, the note comes first and the help line after it. With a shortfall the note
+      is hidden, so the order there is unchanged. */}
+  <p id="no-income-note" class="note" hidden>{t.noIncomeNote}</p>
   <p id="help" hidden>
     {t.help.before}<a href={t.help.linkUrl}>{t.help.linkText}</a>{t.help.after}
   </p>
   <p id="problem-note" class="note" hidden>{t.problemFields}</p>
-  <p id="no-income-note" class="note" hidden>{t.noIncomeNote}</p>
 
   <div id="income-table" class="table-wrapper" tabindex="0" role="region" aria-labelledby="income-caption" hidden>
     <table>
@@ -119,7 +121,7 @@ const hintFor = (id: string) => (t.lines as Record<string, { hint?: string }>)[i
 </Base>
 
 <script>
-  import { calculateBudget, COST_LINES, INCOME_LINES, MAX_OWN_COSTS, readAmount } from '../lib/budget';
+  import { calculateBudget, COST_LINES, INCOME_LINES, MAX_OWN_COSTS, readAmount, shouldShowHelp } from '../lib/budget';
   import type { BudgetLine, Frequency } from '../lib/budget';
   import { eraseBudget, FIXED_LINES, isStorageAvailable, loadBudget, saveBudget } from '../lib/budget-storage';
   import type { SavedBudget } from '../lib/budget-storage';
@@ -312,7 +314,7 @@ const hintFor = (id: string) => (t.lines as Record<string, { hint?: string }>)[i
     }
 
     summary.textContent = message;
-    const showHelp = result.status === 'shortfall';
+    const showHelp = shouldShowHelp(result.status);
     help.hidden = !showHelp;
     problemNote.hidden = !hasProblem;
     noIncomeNote.hidden = result.status !== 'no-income';
