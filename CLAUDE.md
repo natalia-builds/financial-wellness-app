@@ -47,4 +47,4 @@ Anything that matters must end up in the repository or on GitHub, because new se
 
 ## Explaining the work
 
-The maintainer is learning to code through this project. Explain each step and command in plain language before running it, including why teams work this way.
+The maintainer studied computer science and is getting back into hands-on coding through this project. Explain each step and command in plain language before running it, including why teams work this way.
