@@ -80,6 +80,7 @@ Progress is framed as personal milestones rather than points or streaks, for exa
 - **Home page quiz:** The home page will have two parts: a short quiz that suggests tools that may help, and a way to go straight to the tools page. The quiz runs in the browser and sends nothing anywhere. Results suggest and never direct, and every tool stays one click away. If answers point to an urgent need, the results lead with 211info until Tier 1 exists. The quiz waits until there are about five or six tools to choose from. ([Issue #36](https://github.com/natalia-builds/financial-wellness-app/issues/36))
 - **Hosting:** The site is built with Astro and hosted on Cloudflare Pages, which publishes `main` automatically. A Postgres database can be added later if the user data decision changes.
 - **Rate upkeep:** A monthly routine checks published rates against their sources and proposes changes in a pull request. A person reviews and merges every update. See [Operations](operations.md).
+- **Roadmap tracking:** Each roadmap stage is a GitHub milestone, and every piece of work is an Issue assigned to one. Two labels show readiness: "ready to build" and "needs a detailed plan." This brief explains the order and why, and status lives only in the milestones. This replaces tracking status in the brief's roadmap, its Next Steps, and a list in Issue #16, because keeping the same status in several places let them fall out of date. A GitHub Projects board was left out because, for one maintainer, it would be one more thing to keep in sync.
 
 ## Open Questions
 
@@ -108,21 +109,21 @@ As of November 2026, Phase 1 has started and the [site is live](https://financia
 
 ## Phase 1 Roadmap
 
+This section explains the order of the work and why. Which Issues belong to each milestone, and how far along each one is, lives only in [GitHub milestones](https://github.com/natalia-builds/financial-wellness-app/milestones), so it can't go stale here.
+
 Work moves through these milestones in order, except where a milestone waits on people outside the project. Each milestone is split into small Issues, with one pull request each. Page structure is settled before the expensive human checks in Issue #16, so those checks test the layout that will stay. Most of the launch checks wait on outside people (a screen reader user, a qualified wording reviewer, real devices), so the budget tool from milestone 3 was built while they're arranged. How Issues are planned, built, and reviewed is in [Operations](operations.md).
 
-1. **Foundation (done):** add lessons to both tools ([Issue #32](https://github.com/natalia-builds/financial-wellness-app/issues/32)) and add the tools page ([Issue #33](https://github.com/natalia-builds/financial-wellness-app/issues/33)).
-2. **Ready to share (in progress):** finish the launch checks on the new layout ([Issue #16](https://github.com/natalia-builds/financial-wellness-app/issues/16)) and build the success measures ([Issue #23](https://github.com/natalia-builds/financial-wellness-app/issues/23), done). Then share with a small group and ask for feedback.
-3. **Core of Tier 2 (in progress):** add a budgeting tool ([Issue #34](https://github.com/natalia-builds/financial-wellness-app/issues/34), done, with opt-in saving in [Issue #47](https://github.com/natalia-builds/financial-wellness-app/issues/47) and small follow-ups in [Issue #49](https://github.com/natalia-builds/financial-wellness-app/issues/49), both done) and a savings goal tool ([Issue #35](https://github.com/natalia-builds/financial-wellness-app/issues/35)), each with a lesson.
-4. **Quiz and new home page:** add the quiz and split the home page in two ([Issue #36](https://github.com/natalia-builds/financial-wellness-app/issues/36)), once there are enough tools to suggest.
-5. **Start of Tier 3:** add one retirement tool ([Issue #20](https://github.com/natalia-builds/financial-wellness-app/issues/20) or [Issue #21](https://github.com/natalia-builds/financial-wellness-app/issues/21)), after the qualified wording review confirms the Tier 3 boundary holds. These carry the most risk of reading like advice, so they come last.
+1. **Foundation:** lessons on the tools and a tools page, so the page structure is settled first.
+2. **Ready to share:** the launch checks on the settled layout and the Phase 1 success measures. Then share with a small group and ask for feedback.
+3. **Core of Tier 2:** a budget tool and a savings goal tool, each with a lesson.
+4. **Quiz and new home page:** add the quiz and split the home page in two, once there are enough tools to suggest.
+5. **Start of Tier 3:** add one retirement tool, after the qualified wording review confirms the Tier 3 boundary holds. These carry the most risk of reading like advice, so they come last.
 
-Issues marked "Ready to build" have the goal, files, and checks needed to start coding. Issues marked "Needs a detailed plan" must be planned and updated before anyone builds them.
+Phase 2 has its own milestone, starting with how program data is sourced ([Issue #3](https://github.com/natalia-builds/financial-wellness-app/issues/3)).
 
 ## Next Steps
 
-- Finish the launch checks ([Issue #16](https://github.com/natalia-builds/financial-wellness-app/issues/16)), starting with the checks that need outside people, then share with a small group
-- Plan the savings goal tool ([Issue #35](https://github.com/natalia-builds/financial-wellness-app/issues/35))
-- Plan the quiz ([Issue #36](https://github.com/natalia-builds/financial-wellness-app/issues/36)) once there are about five or six tools
+- The next pieces of work are the open Issues in the earliest open [milestone](https://github.com/natalia-builds/financial-wellness-app/milestones), starting with the launch checks that need outside people
 - Validate the concept with potential partners and users
 - Map the Tier 1 resource landscape in Multnomah County for Phase 2
 - Begin early Tier 1 partner conversations in parallel with Phase 1

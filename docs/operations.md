@@ -9,6 +9,7 @@ How the project runs day to day. For what it is and why, see the [concept brief]
 | Live site | <https://financial-wellness-app.pages.dev> |
 | Code and history | <https://github.com/natalia-builds/financial-wellness-app> |
 | Open work and checks | [GitHub Issues](https://github.com/natalia-builds/financial-wellness-app/issues), with launch checks in [Issue #16](https://github.com/natalia-builds/financial-wellness-app/issues/16) |
+| Roadmap progress | [GitHub milestones](https://github.com/natalia-builds/financial-wellness-app/milestones), one per roadmap stage. The order and reasons are in the [brief](concept-brief.md#phase-1-roadmap) |
 | Design System (private) | <https://claude.ai/artifact/1ptfPFQa6QSyvikzTUZLBe> |
 | Monthly rate check routine (private) | <https://claude.ai/code/routines/trig_01N3Z9JKpjoyj4QHCZ9MXGJn> |
 | Visit and answer counts (private login) | GoatCounter dashboard: <https://fin-wellness.goatcounter.com>. How counting works is under "Counting visits" below |
@@ -117,7 +118,7 @@ Node.js and the GitHub CLI are installed in `~/.local`, and `~/.local/bin` is on
 
 Work is split between models to save cost: a more capable model (Opus) plans and reviews, and a faster one (Sonnet) builds.
 
-1. **Plan (Opus):** talk the idea through, settle the decisions, and write each piece as a GitHub Issue marked "Ready to build," with its goal, the files to change, "Done when," and "Out of scope." Record the decisions and why in a comment on the Issue. Work that isn't settled yet is an Issue marked "Needs a detailed plan."
+1. **Plan (Opus):** talk the idea through, settle the decisions, and write each piece as a GitHub Issue with the "ready to build" label, its goal, the files to change, "Done when," and "Out of scope." Assign it to the milestone for its roadmap stage. Record the decisions and why in a comment on the Issue. Work that isn't settled yet gets the "needs a detailed plan" label instead. When planning finishes, swap the label.
 2. **Build (Sonnet):** open a new chat, choose Sonnet in the model picker, and paste the prompt below with the Issue's number. One Issue per chat.
 3. **Review (Opus):** bring the pull request back to a planning session. The review checks the code against the Issue, runs the tests and build, tries the change in a browser (awkward inputs, 375px, dark mode, the keyboard), and runs the [accessibility checks](accessibility-checks.md). Small fixes are made on the pull request's branch. Then merge, and confirm on the live site.
 
