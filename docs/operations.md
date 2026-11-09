@@ -30,6 +30,17 @@ Cloudflare Pages publishes `main` automatically, usually within a minute of a me
 - Every pull request gets its own test address from Cloudflare. Find it in the pull request's checks, or use `https://<branch-name>.financial-wellness-app.pages.dev`, with any `/` in the branch name written as `-`. Anyone with the link can open it.
 - `main` is protected: changes must go through a pull request, for everyone, and force pushes and deletion are blocked. Zero approvals are required, because GitHub doesn't let people approve their own pull requests. Raise this when there are collaborators.
 
+## Keeping the README current
+
+The README is written for people who don't code, such as recruiters and hiring managers, so it describes what the project does today. When a pull request changes what the README says (a tool ships, a launch check finishes, a limitation goes away), update the README's Status, What it does today, and Limitations in the same pull request. The roadmap stages there change rarely, and live progress stays in the milestones.
+
+The screenshot in the README is `docs/images/debt-or-savings-tool.png`. If that tool's page changes, retake it so it matches:
+
+- Run `npm run build`, then `npm run preview`, and open the debt or savings tool. Use the production preview, because the dev server shows Astro's toolbar over the page.
+- Use light mode, collapse the lesson, and keep the tool's own example numbers, so the screenshot shows real results without anyone's data.
+- Capture from the top of the page through the results table, at about 880px wide and double resolution.
+- Update the image's alt text in the README if the numbers or results change.
+
 ## Monthly rate check
 
 A Claude Code routine runs in the cloud on the 1st of each month at 16:00 UTC, which is 8am Pacific in standard time and 9am in daylight time.
@@ -120,7 +131,7 @@ Work is split between models to save cost: a more capable model (Opus) plans and
 
 1. **Plan (Opus):** talk the idea through, settle the decisions, and write each piece as a GitHub Issue with the "ready to build" label, its goal, the files to change, "Done when," and "Out of scope." Assign it to the milestone for its roadmap stage. Record the decisions and why in a comment on the Issue. Work that isn't settled yet gets the "needs a detailed plan" label instead. When planning finishes, swap the label.
 2. **Build (Sonnet):** open a new chat, choose Sonnet in the model picker, and paste the prompt below with the Issue's number. One Issue per chat.
-3. **Review (Opus):** bring the pull request back to a planning session. The review checks the code against the Issue, runs the tests and build, tries the change in a browser (awkward inputs, 375px, dark mode, the keyboard), and runs the [accessibility checks](accessibility-checks.md). Small fixes are made on the pull request's branch. Then merge, and confirm on the live site.
+3. **Review (Opus):** bring the pull request back to a planning session. The review checks the code against the Issue, runs the tests and build, tries the change in a browser (awkward inputs, 375px, dark mode, the keyboard), and runs the [accessibility checks](accessibility-checks.md). Small fixes are made on the pull request's branch. Check whether the README still describes the project accurately (see "Keeping the README current"). Then merge, and confirm on the live site.
 
 Build Issues that change the same files one at a time, merging each before starting the next, so they don't conflict.
 
