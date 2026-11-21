@@ -12,14 +12,14 @@ The goal is a short, accurate briefing and one recommended next step. Read befor
 
 `CLAUDE.md` is already loaded. Also read:
 
-- `docs/concept-brief.md`: the vision, decisions, Current Status, and the Phase 1 Roadmap (the order of work and why)
+- `docs/concept-brief.md`: the vision, decisions, Current Status, and the Roadmap (the order of work and why)
 - `docs/operations.md`: how work is planned, built, and reviewed, and the session-start guide
 
 ## 2. Check what's happening on GitHub
 
 Run these with the `gh` command in `natalia-builds/financial-wellness-app`:
 
-- **Milestones:** `gh api 'repos/natalia-builds/financial-wellness-app/milestones?state=open' -q '.[] | "\(.title): \(.closed_issues) done, \(.open_issues) open"' | sort` shows each one's progress. Numbered milestones run in order. Phase 2 comes after them.
+- **Milestones:** `gh api 'repos/natalia-builds/financial-wellness-app/milestones?state=open' -q '.[] | "\(.title): \(.closed_issues) done, \(.open_issues) open"' | sort` shows each one's progress. Numbered milestones run in order, including those for Phase 2 and Phase 3. Milestones 8 to 10 only go ahead if milestone 8 decides the app needs accounts.
 - **The earliest open milestone's Issues:** `gh issue list --milestone "<title>" --state open --json number,title,labels`. Note which are labeled "ready to build" and which "needs a detailed plan."
 - **Open pull requests:** `gh pr list --state open`. Unfinished or unreviewed work comes before anything new.
 - **Launch checks:** the open items and the most recent comments on Issue #16, since some checks wait on outside people.

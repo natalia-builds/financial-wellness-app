@@ -9,7 +9,7 @@ How the project runs day to day. For what it is and why, see the [concept brief]
 | Live site | <https://financial-wellness-app.pages.dev> |
 | Code and history | <https://github.com/natalia-builds/financial-wellness-app> |
 | Open work and checks | [GitHub Issues](https://github.com/natalia-builds/financial-wellness-app/issues), with launch checks in [Issue #16](https://github.com/natalia-builds/financial-wellness-app/issues/16) |
-| Roadmap progress | [GitHub milestones](https://github.com/natalia-builds/financial-wellness-app/milestones), one per roadmap stage. The order and reasons are in the [brief](concept-brief.md#phase-1-roadmap) |
+| Roadmap progress | [GitHub milestones](https://github.com/natalia-builds/financial-wellness-app/milestones), one per roadmap stage. The order and reasons are in the [brief](concept-brief.md#roadmap) |
 | Design System (private) | <https://claude.ai/artifact/1ptfPFQa6QSyvikzTUZLBe> |
 | Monthly rate check routine (private) | <https://claude.ai/code/routines/trig_01N3Z9JKpjoyj4QHCZ9MXGJn> |
 | Visit and answer counts (private login) | GoatCounter dashboard: <https://fin-wellness.goatcounter.com>. How counting works is under "Counting visits" below |

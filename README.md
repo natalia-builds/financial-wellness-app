@@ -49,7 +49,10 @@ Live progress for each stage is on the [milestones page](https://github.com/nata
 2. **Savings goal tool** with a lesson ([#35](https://github.com/natalia-builds/financial-wellness-app/issues/35)).
 3. **Quiz and a two-part home page** that suggest tools without steering ([#36](https://github.com/natalia-builds/financial-wellness-app/issues/36)).
 4. **First retirement tool** ([#20](https://github.com/natalia-builds/financial-wellness-app/issues/20) or [#21](https://github.com/natalia-builds/financial-wellness-app/issues/21)), after the wording review.
-5. **Phase 2: connecting people in crisis to programs in Multnomah County.** Open questions include where program data comes from ([#3](https://github.com/natalia-builds/financial-wellness-app/issues/3)) and who maintains the project long term ([#4](https://github.com/natalia-builds/financial-wellness-app/issues/4)).
+5. **Phase 2: connecting people in crisis to programs in Multnomah County.** It starts with research into whether public data sources exist and where program data would come from ([#59](https://github.com/natalia-builds/financial-wellness-app/issues/59), [#3](https://github.com/natalia-builds/financial-wellness-app/issues/3)), then a guided resource finder. It needs no accounts.
+6. **Phase 3: accounts, only if they're needed.** First a decision on whether the project needs accounts at all, weighing the privacy cost ([#61](https://github.com/natalia-builds/financial-wellness-app/issues/61)). Only if the answer is yes would a database and sign-in follow. Nothing here is decided, and the no-accounts promise above holds today.
+
+Long-term maintenance is an open question across all phases ([#4](https://github.com/natalia-builds/financial-wellness-app/issues/4)).
 
 ## Limitations and known gaps
 
