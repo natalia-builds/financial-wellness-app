@@ -86,6 +86,8 @@ Progress is framed as personal milestones rather than points or streaks, for exa
 
 - How will resource and eligibility data be sourced and kept current (partnership vs. self-maintained)? ([Issue #3](https://github.com/natalia-builds/financial-wellness-app/issues/3))
 - Who maintains the project long term (volunteers, a fiscal sponsor, a nonprofit)? ([Issue #4](https://github.com/natalia-builds/financial-wellness-app/issues/4))
+- Does the app need accounts, stored user IDs, or social login, and what would that cost people in privacy? Not decided. Review the Phase 1 user data decision first. ([Issue #61](https://github.com/natalia-builds/financial-wellness-app/issues/61))
+- Do public APIs or open data exist that can supply community resources? ([Issue #59](https://github.com/natalia-builds/financial-wellness-app/issues/59))
 
 ## Tier 1 Data Notes (Planning, Not Decided)
 
@@ -107,11 +109,13 @@ As of November 2026, Phase 1 has started and the [site is live](https://financia
 - **Not built yet:** the quiz, goal tools, and Tier 1.
 - **Before sharing widely:** the launch checks in [Issue #16](https://github.com/natalia-builds/financial-wellness-app/issues/16), including a qualified review of the wording.
 
-## Phase 1 Roadmap
+## Roadmap
 
 This section explains the order of the work and why. Which Issues belong to each milestone, and how far along each one is, lives only in [GitHub milestones](https://github.com/natalia-builds/financial-wellness-app/milestones), so it can't go stale here.
 
 Work moves through these milestones in order, except where a milestone waits on people outside the project. Each milestone is split into small Issues, with one pull request each. Page structure is settled before the expensive human checks in Issue #16, so those checks test the layout that will stay. Most of the launch checks wait on outside people (a screen reader user, a qualified wording reviewer, real devices), so the budget tool from milestone 3 was built while they're arranged. How Issues are planned, built, and reviewed is in [Operations](operations.md).
+
+### Phase 1: education and tools
 
 1. **Foundation:** lessons on the tools and a tools page, so the page structure is settled first.
 2. **Ready to share:** the launch checks on the settled layout and the Phase 1 success measures. Then share with a small group and ask for feedback.
@@ -119,7 +123,18 @@ Work moves through these milestones in order, except where a milestone waits on 
 4. **Quiz and new home page:** add the quiz and split the home page in two, once there are enough tools to suggest.
 5. **Start of Tier 3:** add one retirement tool, after the qualified wording review confirms the Tier 3 boundary holds. These carry the most risk of reading like advice, so they come last.
 
-Phase 2 has its own milestone, starting with how program data is sourced ([Issue #3](https://github.com/natalia-builds/financial-wellness-app/issues/3)).
+### Phase 2: connect to resources (planned)
+
+6. **Resource data research:** find out whether public APIs or open data exist for community resources, and how program data would be sourced and kept current ([Issue #3](https://github.com/natalia-builds/financial-wellness-app/issues/3)). This comes first because everything after it depends on what data is available, and it costs no code.
+7. **Resource finder:** a guided intake that matches people to programs they're likely eligible for, starting in Multnomah County. It is built to whatever milestone 6 finds, and it needs no accounts, so the Phase 1 privacy promise holds.
+
+### Phase 3: accounts (planned, and only if needed)
+
+8. **Decide on accounts:** a decision before any code. What need would accounts serve? Are lighter options enough, such as exporting and importing your numbers as a file, or passkeys? Social login tells the sign-in company that a person uses a financial help tool, which matters most for people in crisis. Storing user IDs also makes the project responsible for people's data, including deletion and breaches. This milestone may end with "no," and then milestones 9 and 10 are closed.
+9. **Database foundation:** a database for saved progress, with secrets handling (the repository is public), backups, and a way to delete a person's data.
+10. **Sign-in:** social login, or the lighter option chosen in milestone 8, with a security review and a screen reader check of the sign-in flow.
+
+Accounts come last on purpose. Resource matching works without them, and each step in Phase 3 adds risk to the people the project serves. Milestones 6 and 8 are research and decisions, so the work is learned before it is committed to. None of Phase 2 or 3 is decided until its Issue records the decision and this brief says so. [Issue #4](https://github.com/natalia-builds/financial-wellness-app/issues/4) (long-term maintenance) bears on both phases.
 
 ## Next Steps
 
