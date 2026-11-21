@@ -4,6 +4,20 @@ A free, open-source tool that meets people wherever they are financially. It con
 
 **Live site:** [financial-wellness-app.pages.dev](https://financial-wellness-app.pages.dev)
 
+## Contents
+
+- [Status](#status)
+- [Who it's for and the problem it solves](#who-its-for-and-the-problem-it-solves)
+- [What it does today](#what-it-does-today)
+- [Design decisions and tradeoffs](#design-decisions-and-tradeoffs)
+- [Roadmap](#roadmap)
+- [Limitations and known gaps](#limitations-and-known-gaps)
+- [For developers](#for-developers)
+  - [Run it on your computer](#run-it-on-your-computer)
+  - [Where things live](#where-things-live)
+  - [Contributing](#contributing)
+  - [License](#license)
+
 ## Status
 
 **In progress.** Phase 1 is live with three calculators, each with a short lesson. It hasn't been shared widely yet. First come testing with screen reader users and a review of the wording by a qualified person.
