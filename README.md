@@ -2,7 +2,7 @@
 
 A free, open-source tool that meets people wherever they are financially. It connects people in crisis to help available today, teaches the basics as they stabilize, and supports them as they build long-term financial security.
 
-**Live site:** [financial-wellness-app.pages.dev](https://financial-wellness-app.pages.dev)
+**Try it:** [financial-wellness-app.pages.dev](https://financial-wellness-app.pages.dev)
 
 ## Contents
 
@@ -12,8 +12,11 @@ A free, open-source tool that meets people wherever they are financially. It con
 - [Design decisions and tradeoffs](#design-decisions-and-tradeoffs)
 - [Roadmap](#roadmap)
 - [Limitations and known gaps](#limitations-and-known-gaps)
+- [How to use it](#how-to-use-it)
+  - [First steps](#first-steps)
+  - [Your data and backups](#your-data-and-backups)
 - [For developers](#for-developers)
-  - [Run it on your computer](#run-it-on-your-computer)
+  - [Run it for development](#run-it-for-development)
   - [Where things live](#where-things-live)
   - [Contributing](#contributing)
   - [License](#license)
@@ -81,11 +84,29 @@ Long-term maintenance is an open question across all phases ([#4](https://github
 
 ---
 
+## How to use it
+
+Open the [live site](https://financial-wellness-app.pages.dev). There is nothing to install and no account to create.
+
+### First steps
+
+1. **Pick a tool** from the home page, or open the tools page for the full list.
+2. **Read the short lesson** above the tool. It explains the idea before you try it with your own numbers.
+3. **Enter your own numbers.** Nothing you type is sent anywhere.
+4. **Optional, in the budget tool:** tick **Remember my numbers on this device** to keep them for next time. Untick the box to erase them.
+5. **Optional:** answer the "Was this helpful?" question after the results. Answers are counted as totals, with no cookies.
+
+### Your data and backups
+
+Nothing you type is stored on a server, and there are no accounts. A saved budget is the only thing kept, and only if you choose to: it stays in that browser on that device. Clearing the browser's data, or switching to another device, loses it. There is no backup or restore, so write down anything you need to keep, and avoid saving on a shared computer.
+
+---
+
 ## For developers
 
 Built with [Astro](https://astro.build) and hosted on Cloudflare Pages, which publishes `main` automatically. Interactive components come from [Accessible Astro Components](https://github.com/incluud/accessible-astro-components). Tests use [Vitest](https://vitest.dev).
 
-### Run it on your computer
+### Run it for development
 
 You'll need [Node.js](https://nodejs.org) installed.
 
