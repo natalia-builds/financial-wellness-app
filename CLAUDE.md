@@ -35,6 +35,7 @@ Everything we build must meet **WCAG 2.2 Level AA**. This applies to every page,
 - Check money results against a separate calculation. Make sure a result can't look better than it is, such as savings shown without the debt still owed.
 - Never commit secrets. Keep them in `.env`, which Git ignores. This repository is public.
 - After merging, confirm the change on the live site.
+- Start every issue from a template in `.github/ISSUE_TEMPLATE/`, the two GitHub offers on "New issue": `task.md` (Why, What to do, Done when as real checkboxes, Before you start) and `decision.md` (a "decide X" issue that ends in a record under `docs/decisions/`). When an issue closes, tick the Done-when boxes that were actually verified, and leave the others unticked with a comment saying why.
 
 ## Keeping knowledge
 
