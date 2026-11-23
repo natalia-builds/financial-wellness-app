@@ -28,6 +28,7 @@ Everything we build must meet **WCAG 2.2 Level AA**. This applies to every page,
 ## Workflow
 
 - Never commit directly to `main`. Use a short-lived branch and a pull request, and keep each pull request to one purpose.
+- GitHub enforces that: a ruleset named "Protect main" (repository Settings, Rules) requires a pull request and blocks force pushes and deletion of `main`, and it applies to the maintainer too. It requires no approving reviews, because the maintainer is the only reviewer. It requires no status checks, because the only check on a pull request is the Cloudflare Pages preview, and tests are not run on GitHub. So the tests and build must be run locally before every commit. If a test workflow is added, add its check names to the ruleset by their exact names, and renaming a required job later blocks every merge until the ruleset is edited to match.
 - Run `npm test` and `npm run build` before every commit. Money math needs automated tests.
 - Check changes in a browser, not only with tests. Test the awkward inputs, a 375px phone width, and dark mode.
 - Before opening a pull request that changes anything on a page, run the [accessibility checks](docs/accessibility-checks.md) on every page it touches, and list the results by WCAG criterion in the pull request.
